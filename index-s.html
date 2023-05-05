@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>稿件管理系统</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
+  <div class="wrapper">
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="index3.html" class="brand-link">
+        <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+          style="opacity: .8">
+        <span class="brand-text font-weight-light">稿件管理系统</span>
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          </div>
+          <div class="info">
+            <a href="#" class="d-block">欢迎<span id="span_user"></span></a>
+          </div>
+          <div class="info">
+            <a href="#" class="btn btn-primary btn-sm" onclick="loginOut();">退出</a>
+          </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" id="menu-ul"
+            data-accordion="false">
+            <li class="nav-item">
+              <a href="./home-index.html" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  首页
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+            </li>
+            <!-- <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  撰写管理
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="./project.html" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>项目列表</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="./manuscript-list.html" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>稿件列表</p>
+                  </a>
+                </li>
+              </ul>
+            </li> -->
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-th"></i>
+                <p>
+                  发布管理
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="./my-order-list.html" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>我的订单</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-lock"></i>
+                <p>
+                  结算管理
+                  <i class="right fas fa-angle-left"></i>
+                  <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="./settle-accounts-list.html" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>结算列表</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="./user-modify-pws.html" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  修改密码
+                </p>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper iframe-mode" data-widget="iframe" data-loading-screen="750">
+      <div class="nav navbar navbar-expand navbar-white navbar-light border-bottom p-0">
+        <a class="nav-link bg-light" href="#" data-widget="iframe-scrollleft"><i
+            class="fas fa-angle-double-left"></i></a>
+        <ul class="navbar-nav overflow-hidden" role="tablist"></ul>
+        <a class="nav-link bg-light" href="#" data-widget="iframe-scrollright"><i
+            class="fas fa-angle-double-right"></i></a>
+        <a class="nav-link bg-light" href="#" data-widget="iframe-fullscreen"><i class="fas fa-expand"></i></a>
+      </div>
+      <div class="tab-content">
+        <div class="tab-empty">
+          <h2 class="display-4">No tab selected!</h2>
+        </div>
+        <div class="tab-loading">
+          <div>
+            <h2 class="display-4">Tab is loading <i class="fa fa-sync fa-spin"></i></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+      All rights reserved.
+      <div class="float-right d-none d-sm-inline-block">
+        <b>Version</b> 3.2.0
+      </div>
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <div id="hideAdminMenu" style="display: none;">
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-sync"></i>
+        <p>
+          用户管理
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="./company.html" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>公司信息</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="./user.html" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>用户管理</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <!-- Bootstrap 4 -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- overlayScrollbars -->
+  <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- overlayScrollbars -->
+  <script src="dist/js/common.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      setTimeout(function () {
+        $(".nav-item").first().find("a").click();
+      }, 500);
+     // getUserInfo();
+      // getAdminInfo();
+    });
+    function getUserInfo() {
+      var useUrl = domainUrl + "/user/getCurrentUser";
+      getMessage(useUrl).then(function (res) {
+        if (res.code == 200) {
+          $("#span_user").html(res.data)
+        } else {
+          alert(res.message);
+         // location.href = "./login.html";
+        }
+      })
+    }
+    function getAdminInfo() {
+      var useUrl = domainUrl + "/user/getCurrentUserInfo";
+      getMessage(useUrl).then(function (res) {
+        if (res.code == 200) {
+          if (res.data.companyId == 0 && res.data.name == "admin") {
+            $(".nav-item").first().after($("#hideAdminMenu").html());
+          }
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+    function loginOut() {
+      location.href = "./login.html"
+      // var logOutUrl = domainUrl +  "/index/loginOut";
+      // 	getMessage(logOutUrl).then(function (res) {
+      // 		if (res.code == 200) {
+      // 			location.href = "./login.html"
+      // 		} else {
+      // 			alert(res.message)
+      // 		}
+      // 	})
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>待审核结算</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">待审核结算</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">待审核结算</a></li>
+                <li class="breadcrumb-item active">结算管理</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-3">
+                <select class="form-control select2bs4" id="sel_project" data-placeholder="项目" style="width: 100%;">
+                </select>
+              </div>
+              <div class="col-3">
+                <input type="text" class="form-control" id="txt_order" placeholder="订单ID">
+              </div>
+              <div class="col-3">
+                <select class="form-control select2bs4" id="sel_supplier" data-placeholder="供应商" style="width: 100%;">
+                </select>
+              </div>
+              <div class="col-1">
+                <span  style="display: flex;flex-direction:  row;width: 100%; height: 100% ;align-items: center; ">审核状态</span>
+              </div>
+              <div class="col-3">
+                <select class="form-control" id="search_isChecked">
+                  <option value="-1">请选择</option>
+                  <option value="0">未审核</option>
+                  <option value="1">已审核</option>
+                </select>
+              </div>
+              <!-- <div class="col-1">
+                <div class="form-check">
+                  <input class="form-check-input" id="txt_isChecked" type="checkbox">
+                  <label class="form-check-label">是否审核</label>
+                </div>
+              </div> -->
+              <!--  <div class="col-3">
+                <input type="text" class="form-control" placeholder="结束日期">
+              </div> -->
+              <div class="col-3">
+                <a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="loadData();"><i
+                    class="fa fa-search"></i>查询</a>
+              </div>
+            </div>
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- ./wrapper -->
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/js/select2.full.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- jsGrid -->
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(function () {
+      $("#sel_project").select2({
+        ajax: {
+          url: domainUrl + "/project/geUserProjectList",
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            let newData = [];
+            if (data.code == 200) {
+              for (var i = 0; i < data.data.length; i++) {
+                newData.push({
+                  "id": data.data[i].id,
+                  "text": data.data[i].name
+                });
+              }
+            } else {
+              alert(res.message)
+            }
+            return {
+              results: newData,
+              pagination: {
+                more: (params.page * 10) < data.total
+              }
+            };
+          }
+        }
+
+      });
+      $("#sel_supplier").select2({
+        ajax: {
+          url: domainUrl + "/supplier/getSearchList",
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            let newData = [];
+            if (data.code == 200) {
+              for (var i = 0; i < data.data.length; i++) {
+                newData.push({
+                  "id": data.data[i].id,
+                  "text": data.data[i].realName
+                });
+              }
+            } else {
+              alert(res.message)
+            }
+            return {
+              results: newData,
+              pagination: {
+                more: (params.page * 10) < data.total
+              }
+            };
+          }
+        }
+
+      });
+      $("#jsGrid1").jsGrid({
+        height: "100%",
+        width: "100%",
+        editing: false,
+        sorting: true,
+        paging: true,
+        pageSize: 20,
+        pageIndex: 1,
+        pageLoading: true,
+        data: [
+        ],
+        autoload: true,
+        controller: {
+          loadData: function (filter) {
+            var d = $.Deferred();
+            var getData = domainUrl + "/examineSettle/getList";
+            postMessage(getData, {
+              projectId: $("#sel_project").val(),
+              supplierId: $("#sel_supplier").val(),
+              isChecked: $("#search_isChecked").val()=="1"?true:( $("#search_isChecked").val()=="0"?false:null),
+              orderId: $("#txt_order").val(),
+              pageSize: filter.pageSize,
+              pageIndex: filter.pageIndex
+            }).then(function (res) {
+              if (res.code == 200) {
+                var newData = {
+                  data: res.data,
+                  itemsCount: res.total
+                }
+                d.resolve(newData);
+              } else {
+                alert(res.message)
+              }
+            })
+            return d.promise();
+          },
+        },
+        onItemDeleted: function (args) {
+          // var id = args.item.id;
+          // var categoryUrl = domainUrl + "/monitoringPlantform/delete?id=" + id;
+          // postMessage(categoryUrl, {}).then(function (res) {
+          //   if (res.code == 200) {
+          //   } else {
+          //     alert(res.message);
+          //     $("#jsGrid1").jsGrid("loadData");
+          //   }
+          // });
+        },
+        onItemUpdated: function (args) {
+          //saveCategoryHotWord(args.item);
+        },
+
+        fields: [
+          { name: "id", type: "text", width: 50 },
+          { name: "projectName", title: "项目", type: "text", width: 50 },
+          { name: "orderId", title: "订单编号", type: "text", width: 150 },
+          { name: "supplierName", title: "供应商", type: "text", width: 150 },
+          { name: "manuscriptCount", title: "稿件数量", type: "number", width: 80 },
+          { name: "isChecked", title: "是否审核", type: "checkbox", width: 150 },
+          {
+            itemTemplate: function (_, item) {
+              return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">通过审核</a>')
+                .on("click", function () {
+                  submitCheck(item);
+                  // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                });
+            },
+            align: "center",
+            width: 50
+          },
+        ]
+      });
+    });
+    function loadData() {
+      $("#jsGrid1").jsGrid("loadData");
+    }
+    function submitCheck(item) {
+      var id = item.id;
+      var categoryUrl = domainUrl + "/examineSettle/submitCheck?id=" + id;
+      postMessage(categoryUrl, {}).then(function (res) {
+        if (res.code == 200) {
+          alert(res.message);
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+          $("#jsGrid1").jsGrid("loadData");
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

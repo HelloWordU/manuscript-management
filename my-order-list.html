@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>我的订单</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">我的订单</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">我的订单</a></li>
+                <li class="breadcrumb-item active">发布管理</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-3">
+                <select class="form-control select2bs4" id="sel_project" data-placeholder="项目" style="width: 100%;">
+                </select>
+              </div>
+              <div class="col-1" ><span  style="display: flex;flex-direction:  row;width: 100%; height: 100% ;align-items: center; ">接单状态</span></div>
+              <div class="col-3">
+                <select class="form-control" id="search_isBeginOrder">
+                  <option value="-1">请选择</option>
+                  <option value="0">未接单</option>
+                  <option value="1">已结单</option>
+                </select>
+              </div>
+              <div class="col-1">
+                <span  style="display: flex;flex-direction:  row;width: 100%; height: 100% ;align-items: center; ">完成状态</span>
+              </div>
+              <div class="col-3">
+                <select class="form-control" id="search_isComplete">
+                  <option value="-1">请选择</option>
+                  <option value="0">未完成</option>
+                  <option value="1">已完成</option>
+                </select>
+              </div>
+              <!--  <div class="col-3">
+                <input type="text" class="form-control" placeholder="结束日期">
+              </div> -->
+              <div class="col-3">
+                <a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="loadData()"><i
+                    class="fa fa-search"></i>查询</a>
+              </div>
+            </div>
+
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.content -->
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-upload-manuscript">
+    <div class="modal-dialog  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">稿件执行反馈</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="url">稿件地址</label>
+                <input class="form-control" type="text" id="txt_url" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="txt_shotScreenUrl">稿件截图</label>
+                <input type="file" accept="image/*" class="form-control" id="txt_shotScreenUrl" placeholder="请选择文件">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="saveManuscUpload();">保存</button>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.modal-content -->
+  </div>
+
+  <div class="modal fade" id="modal-show-manuscript">
+    <div class="modal-dialog  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">订单稿件</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+
+          </div>
+          <div class="row" id="div-show-histtory">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>稿件ID</th>
+                  <th>标题</th>
+                  <th>发布上传</th>
+                </tr>
+              </thead>
+
+              <tbody id="tb_manuscript">
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- ./wrapper -->
+  <input type="hidden" id="hid_manuscript_id" />
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Select2 -->
+  <script src="plugins/select2/js/select2.full.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- jsGrid -->
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(function () {
+      $("#sel_project").select2({
+        ajax: {
+          url: domainUrl + "/project/geUserProjectList",
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            let newData = [];
+            if (data.code == 200) {
+              for (var i = 0; i < data.data.length; i++) {
+                newData.push({
+                  "id": data.data[i].id,
+                  "text": data.data[i].name
+                });
+              }
+            } else {
+              alert(res.message)
+            }
+            return {
+              results: newData,
+              pagination: {
+                more: (params.page * 10) < data.total
+              }
+            };
+          }
+        }
+
+      });
+      $("#jsGrid1").jsGrid({
+        height: "100%",
+        width: "100%",
+        editing: false,
+        sorting: true,
+        paging: true,
+        pageSize: 20,
+        pageIndex: 1,
+        pageLoading: true,
+        data: [
+        ],
+        autoload: true,
+        controller: {
+          loadData: function (filter) {
+            var d = $.Deferred();
+            var getData = domainUrl + "/order/getSupplierList";
+            postMessage(getData, {
+              projectId: $("#sel_project").val(),
+              isBeginOrder: $("#search_isBeginOrder").val()=="1"?true:($("#search_isBeginOrder").val()=="0"?false:null),
+              isComplete: $("#search_isComplete").val()=="1"?true:($("#search_isComplete").val()=="0"?false:null),//
+              pageSize: filter.pageSize,
+              pageIndex: filter.pageIndex
+            }).then(function (res) {
+              if (res.code == 200) {
+                var newData = {
+                  data: res.data,
+                  itemsCount: res.total
+                }
+                d.resolve(newData);
+              } else {
+                alert(res.message)
+              }
+            })
+            return d.promise();
+          },
+        },
+        onItemDeleted: function (args) {
+          var id = args.item.id;
+          var categoryUrl = domainUrl + "/monitoringPlantform/delete?id=" + id;
+          postMessage(categoryUrl, {}).then(function (res) {
+            if (res.code == 200) {
+            } else {
+              alert(res.message);
+              $("#jsGrid1").jsGrid("loadData");
+            }
+          });
+        },
+        onItemUpdated: function (args) {
+          saveCategoryHotWord(args.item);
+        },
+
+        fields: [
+          { name: "id", type: "text", width: 50 },
+          { name: "projectName", title: "项目", type: "text", width: 50 },
+          { name: "manuscriptCount", title: "稿件数量", type: "text", width: 60 },
+          { name: "manuscriptPublishCount", title: "已发稿件", type: "text", width: 60 },
+          { name: "isBeginOrder", title: "是否接单", type: "checkbox", width: 70 },
+          { name: "isComplete", title: "是否完成", type: "checkbox", width: 70 },
+          {
+            itemTemplate: function (_, item) {
+              if (!item.isBeginOrder) {
+                return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">接单</a>')
+                  .on("click", function () {
+                    confirmOrder(item);
+                    // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                  });
+              }
+
+            },
+            align: "center",
+            width: 50
+          },
+          {
+            itemTemplate: function (_, item) {
+              if (item.isBeginOrder) {
+                return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">发稿回执</a>')
+                  .on("click", function () {
+                    showManuscript(item);
+                    // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                  });
+              }
+            },
+            align: "center",
+            width: 50
+          },
+          {
+            itemTemplate: function (_, item) {
+              if (item.state == 1) {
+                return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">创建结算</a>')
+                  .on("click", function () {
+                    createExamineSettle(item);
+                    // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                  });
+              }
+
+            },
+            align: "center",
+            width: 50
+          },
+          // {
+          //   itemTemplate: function (_, item) {
+          //     return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">新建发布</a>')
+          //       .on("click", function () {
+          //         // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+          //       });
+          //   },
+          //   align: "center",
+          //   width: 50
+          // },
+        ]
+      });
+      //  loadKeyWord();
+    });
+
+    function loadData() {
+      $("#jsGrid1").jsGrid("loadData");
+    }
+    function save(id, categoryId, name) {
+      var saveUrl = domainUrl + "/monitoringPlantform/save";
+      postMessage(saveUrl, {
+        id: id,
+        categoryId: categoryId,
+        name: name
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert("保存成功");
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      })
+    }
+    function saveCategoryHotWord(dataItem) {
+      save(dataItem.id, dataItem.categoryId, dataItem.name);
+    }
+    function addCategoryHotWord() {
+      save(null, $('#addKeyword').val(), $("#name").val());
+    }
+    function showManuscript(orderItem) {
+      //alert("显示订单稿件");
+      var saveUrl = domainUrl + "/order/getOrderManuscriptList?orderId=" + orderItem.id;
+      postMessage(saveUrl, {}).then(function (res) {
+        if (res.code == 200) {
+          var trHtml = "";
+          for (i = 0; i < res.data.length; i++) {
+            var item = res.data[i];
+            var itemHtml = "<tr><td>" +
+              item.id + "</td>" +
+              "<td>" +
+              item.title + "</td><td>" +
+              ' <a  href="javascript:void(0)" onclick="showUpload(' + item.manuscriptId + ')" class="btn btn-primary btn-sm">上传</a>'
+              + "</td>" +
+              "</tr>";
+            trHtml += itemHtml;
+          }
+          $("#tb_manuscript").html(trHtml);
+          //alert(res.message);
+          $('#modal-show-manuscript').modal('show');
+
+          //  alert("保存成功");
+          // $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      })
+    }
+
+    function confirmOrder(item) {
+      var saveUrl = domainUrl + "/order/confirmOrder?id=" + item.id;
+      postMessage(saveUrl, {}).then(function (res) {
+        if (res.code == 200) {
+          alert("操作成功");
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      })
+    }
+
+    function showUpload(manuscriptId) {
+      $("#hid_manuscript_id").val(manuscriptId);
+      $('#modal-show-manuscript').modal('hide');
+      $('#modal-upload-manuscript').modal('show');
+    }
+    function createExamineSettle(item) {
+      var saveUrl = domainUrl + "/examineSettle/save";
+      postMessage(saveUrl, {
+        orderId:item.id
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert("操作成功");
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      })
+    }
+    function saveManuscUpload() {
+      var _name, _fileName, personsFile;
+      personsFile = document.getElementById("txt_shotScreenUrl");
+      _name = personsFile.value;
+      _fileName = _name.substring(_name.lastIndexOf(".") + 1).toLowerCase();
+      if (_fileName !== "png" && _fileName !== "jpg") {
+        alert("上传图片格式不正确，请重新上传");
+      }
+      var saveUrl = domainUrl + "/manuscript/uploadUrl";
+      var data = new FormData();
+      data.append('manuscriptId', $("#hid_manuscript_id").val());
+      data.append('url', $("#txt_url").val());
+      data.append('uploadFile', $("#txt_shotScreenUrl").prop("files")[0]);
+
+      $.ajax({
+        url: saveUrl,
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        beforeSend: function (request) {
+          request.setRequestHeader("accessToken", getCookie("accessToken"));
+        },
+        success: function (res) {
+          if (res.code == 200) {
+            alert("上传成功");
+            $("#txt_shotScreenUrl").val('');
+            $('#modal-upload-manuscript').modal('hide');
+            $('#modal-show-manuscript').modal('show');
+            loadData();
+          }
+          else {
+            alert(res.message);
+          }
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

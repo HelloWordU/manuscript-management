@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>稿件列表</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">稿件审核</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">稿件审核</a></li>
+                <li class="breadcrumb-item active">撰写管理</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-3">
+                <input type="text" class="form-control" id="search_title" placeholder="标题">
+              </div>
+              <div class="col-1"><span style="display: flex;flex-direction:  row;width: 100%; height: 100% ;align-items: center; ">类型</span></div>
+              <div class="col-3">
+                <select class="form-control" id="search_type">
+                  <option value="0">请选择</option>
+                </select>
+              </div>
+              <div class="col-1" ><span  style="display: flex;flex-direction:  row;width: 100%; height: 100% ;align-items: center; ">审核状态</span></div>
+              <div class="col-3">
+                <select class="form-control" id="search_check_state">
+                  <option value="-1">请选择</option>
+                  <!-- <option value="0">未提交</option> -->
+                  <option value="1">待审核</option>
+                  <option value="2">审核通过</option>
+                  <option value="3">打回</option>
+                </select>
+              </div>
+              <!--  <div class="col-3">
+                <input type="text" class="form-control" placeholder="结束日期">
+              </div> -->
+              <div class="col-3">
+                <a href="javascript:void(0)" onclick="loadData();" class="btn btn-primary btn-sm"><i
+                    class="fa fa-search"></i>查询</a>
+              </div>
+            </div>
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- ./wrapper -->
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">导入文章</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="uploadFile1">请上传文件</label>
+                <input type="file" class="form-control" id="uploadFile1" placeholder="请选择文件">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="save();">保存</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <input type="hidden" id="hidManuscriptId" />
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- jsGrid -->
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(function () {
+      $("#jsGrid1").jsGrid({
+        height: "100%",
+        width: "100%",
+        editing: false,
+        sorting: true,
+        paging: true,
+        pageSize: 20,
+        pageIndex: 1,
+        pageLoading: true,
+        data: [
+          {
+            id: 1,
+            project: "一汽丰田",
+            title: "22款中东霸道4000TXL九气真实油耗多少",
+            auth: "毛毛",
+            type: "类型",
+            product: "霸道",
+            charCount: 2000,
+            originalPresent: "95%",
+            url: "http://www.okeycar.com/dealer/20220509/153093.html",
+            shotScreen: "http://www.okeycar.com/dealer/20220509/153093.html",
+            isPusblish: true
+          }
+        ],
+        autoload: false,
+        controller: {
+          loadData: function (filter) {
+            var d = $.Deferred();
+            var getData = domainUrl + "/manuscript/getCustomerList";
+            postMessage(getData, {
+              project: $("#search_name").val(),
+              title: $("#search_title").val(),
+              type: $("#search_type").val(),
+              product: null,
+              checkState: $("#search_check_state").val(),
+              pageIndex: filter.pageIndex,
+              pageSize: filter.pageSize
+            }).then(function (res) {
+              if (res.code == 200) {
+                var newData = {
+                  data: res.data,
+                  itemsCount: res.total
+                }
+                d.resolve(newData);
+              } else {
+                alert(res.message)
+              }
+            })
+            return d.promise();
+          },
+        },
+        onItemDeleted: function (args) {
+          var id = args.item.id;
+          var categoryUrl = domainUrl + "/manuscript/delete?id=" + id;
+          postMessage(categoryUrl, {}).then(function (res) {
+            if (res.code == 200) {
+            } else {
+              alert(res.message);
+              $("#jsGrid1").jsGrid("loadData");
+            }
+          });
+        },
+        onItemUpdated: function (args) {
+          saveCategoryHotWord(args.item);
+        },
+
+        fields: [
+          { name: "id", type: "text", width: 50 },
+          { name: "project", title: "项目", type: "text", width: 50 },
+          { name: "title", title: "标题", type: "text", width: 150 },
+          { name: "auth", title: "作者", type: "text", width: 80 },
+          { name: "type", title: "类型", type: "text", width: 70 },
+          { name: "product", title: "产品", type: "text", width: 70 },
+          { name: "charCount", title: "字数", type: "number", width: 70 },
+          { name: "repeatRate", title: "相似度", type: "text", width: 70 },
+          { name: "url", title: "URL", type: "text", width: 100 },
+          { name: "shotScreen", title: "截图", type: "text", width: 100 },
+          { name: "isPublish", title: "是否发布", type: "checkbox", width: 40 },
+          {
+            itemTemplate: function (_, item) {
+              if(item.checkState==1)
+              {
+                return '待审核';
+              }else if(item.checkState==2)
+              {
+                return '审核通过';
+              }
+              else if(item.checkState==3)
+              {
+                return '打回';
+              }
+              return '';
+            },
+            align: "center",
+            width: 50,
+            title: "审核状态"
+          },
+          // { name: '操作', type: "control", width: 40 ,  deleteButton: true, editButton:false},
+          {
+            itemTemplate: function (_, item) {
+              return $('<a target="_blank" href="' + fileUrl + '/' + item.projectId + '/' + item.savePath + '" class="btn btn-primary btn-sm">下载</a>');
+            },
+            align: "center",
+            width: 50
+          },
+          {
+            itemTemplate: function (_, item) {
+              if (item.checkState == 1) {
+                return $('<a  href="javascript:void(0)" onclick="upload(' + item.id + ');"  class="btn btn-primary btn-sm">上传</a>');
+              }
+              return '';
+
+            },
+            align: "center",
+            width: 50
+          },
+          {
+            itemTemplate: function (_, item) {
+              if (item.checkState == 1) {
+                return $('<a  href="javascript:void(0)" onclick="checkPass(' + item.id + ');"  class="btn btn-primary btn-sm">通过</a>');
+              }
+            },
+            align: "center",
+            width: 50
+          },
+          {
+            itemTemplate: function (_, item) {
+              if (item.checkState == 1) {
+                return $('<a  href="javascript:void(0)" onclick="setReUpload(' + item.id + ');"  class="btn btn-primary btn-sm">打回</a>');
+              }
+            },
+            align: "center",
+            width: 50
+          },
+        ]
+      });
+      $("#jsGrid1").jsGrid("loadData");
+      //loadKeyWord();
+      loadType();
+    });
+    function loadType() {
+      var categoryUrl = domainUrl + "/manuscriptType/get";
+      getMessage(categoryUrl).then(function (res) {
+        if (res.code == 200) {
+          // $('#search_type').html("");
+          if (res.data == null)
+            return;
+          res.data.forEach(element => {
+            var optionValue = element.id;
+            var optionText = element.name;
+            $('#search_type').append(new Option(optionText, optionValue))
+          });
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+    function loadData() {
+      $("#jsGrid1").jsGrid("loadData");
+    }
+    function upload(id) {
+      $("#hidManuscriptId").val(id);
+      $('#modal-default').modal('show');
+    }
+    function checkPass(id) {
+      var categoryUrl = domainUrl + "/manuscript/checkPass?id=" + id;
+      postMessage(categoryUrl, {
+        id: id
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert(res.message);
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      });
+    }
+    function setReUpload(id) {
+      var categoryUrl = domainUrl + "/manuscript/setReUpload?id=" + id;
+      postMessage(categoryUrl, {
+        id: id
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert(res.message);
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      });
+    }
+    function save() {
+      var saveUrl = domainUrl + "/manuscript/single-upload";
+      var data = new FormData();
+      data.append('id', $("#hidManuscriptId").val());
+      data.append('uploadFile', $("#uploadFile1").prop("files")[0]);
+
+      $.ajax({
+        url: saveUrl,
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        beforeSend: function (request) {
+          request.setRequestHeader("accessToken", getCookie("accessToken"));
+        },
+        success: function (res) {
+          if (res.code == 200) {
+            alert("上传成功");
+            $("#uploadFile1").val('');
+            loadData();
+            $('#modal-default').modal('hide');
+          }
+          else {
+            alert(res.message);
+          }
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

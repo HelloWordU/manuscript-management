@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用户信息</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">用户维护</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">用户维护</a></li>
+                <li class="breadcrumb-item active">用户管理</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="col-sm-6">
+              <div class=""></div>
+              <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
+                class="btn btn-primary btn-sm"><i class="fa fa-copy"></i> 新增</a>
+            </div>
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- ./wrapper -->
+</div>
+
+    <div class="modal fade" id="modal-default">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">新增用户</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="userName">用户名</label>
+                  <input type="text" class="form-control" id="userName" placeholder="请输入用户名">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="realName">真实姓名</label>
+                  <input type="text" class="form-control" id="realName" placeholder="请输入真实姓名">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>备注</label>
+                  <label class="form-control">默认密码 123456</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="save();">保存</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE -->
+    <script src="dist/js/adminlte.js"></script>
+    <script src="plugins/jsgrid/jsgrid.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="dist/js/common.js"></script>
+    <!-- Page specific script -->
+    <script>
+      var projectData = {};
+      $(function () {
+        $("#jsGrid1").jsGrid({
+          height: "100%",
+          width: "100%",
+          autoload: true,
+          editing: true,
+          sorting: true,
+          paging: true,
+          data: [],
+          controller: {
+            loadData: function () {
+              var d = $.Deferred();
+              var categoryUrl = domainUrl + "/user/get";
+              getMessage(categoryUrl).then(function (res) {
+                if (res.code == 200) {
+                  d.resolve(res.data);
+                } else {
+                  alert(res.message)
+                }
+              })
+              return d.promise();
+            },
+          },
+          onItemDeleted: function (args) {
+            var id = args.item.id;
+            var categoryUrl = domainUrl + "/user/delete?id=" + id;
+            postMessage(categoryUrl, {}).then(function (res) {
+              if (res.code == 200) {
+              } else {
+                alert(res.message);
+                $("#jsGrid1").jsGrid("loadData");
+              }
+            });
+          },
+          onItemUpdated: function (args) {
+            saveUser(args.item.id, args.item.name, args.item.realName);
+          },
+          fields: [
+            // { name: "id", type: "number", width: 50 },
+            { name: "name", title: "用户名称", type: "text", width: 150 },
+            { name: "realName", title: "真实姓名", type: "text", width: 150 },
+            { name: "groupName", title: "用户分组", type: "text", width: 150,readOnly:true },
+            { name: '操作', type: "control", width: 80,} //editButton: false, 
+          ]
+        });
+     //   loadCompany();
+      });
+
+      function save() {
+        saveUser(null, $("#userName").val(), $("#realName").val());
+      }
+      function saveUser(id, name, realName) {
+        var categoryUrl = domainUrl + "/user/add";
+        postMessage(categoryUrl, {
+          id: id,
+          name: name,
+          realName: realName
+        }).then(function (res) {
+          
+          if (res.code == 200) {
+            alert("保存成功");
+            $("#jsGrid1").jsGrid("loadData");
+          } else {
+            alert(res.message);
+            $("#jsGrid1").jsGrid("loadData");
+          }
+        });
+      }
+
+      function loadCompany() {
+        var categoryUrl = domainUrl + "/company/get";
+        getMessage(categoryUrl).then(function (res) {
+          if (res.code == 200) {
+            if (res.data == null)
+            return;
+          res.data.forEach(element => {
+            var optionValue = element.id;
+            var optionText = element.name;
+            $('#companyName').append(new Option(optionText, optionValue));
+          });
+          } else {
+            alert(res.message);
+          }
+        })
+      }
+    </script>
+</body>
+
+</html>

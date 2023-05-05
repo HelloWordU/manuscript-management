@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>稿件列表</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">稿件列表</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">稿件列表</a></li>
+                <li class="breadcrumb-item active">撰写管理</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-3">
+                <select class="form-control select2bs4" id="sel_project" data-placeholder="项目" style="width: 100%;">
+                </select>
+              </div>
+              <div class="col-3">
+                <input type="text" class="form-control" id="search_title" placeholder="标题">
+              </div>
+              <div class="col-1"> <span
+                  style="display: flex;flex-direction:  row;width: 100%; height: 100% ;align-items: center; ">类型</span>
+              </div>
+              <div class="col-3">
+                <select class="form-control" id="search_type">
+                  <option value="0">请选择</option>
+                </select>
+              </div>
+              <!--  <div class="col-3">
+                <input type="text" class="form-control" placeholder="结束日期">
+              </div> -->
+            </div>
+            <div class="row">
+              <div class="col-1"><span
+                  style="display: flex;flex-direction:  row;width: 100%; height: 100% ;align-items: center; ">审核状态</span>
+              </div>
+              <div class="col-3">
+                <select class="form-control" id="search_check_state">
+                  <option value="-1">请选择</option>
+                  <option value="0">未提交</option>
+                  <option value="1">待审核</option>
+                  <option value="2">审核通过</option>
+                  <option value="3">打回</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <a href="javascript:void(0)" onclick="loadData();" class="btn btn-primary btn-sm"><i
+                    class="fa fa-search"></i>查询</a>
+              </div>
+            </div>
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- ./wrapper -->
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">新增监控平台</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="addKeyword">关键词</label>
+                <select id="addKeyword" name="addKeyword"></select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="name">监控平台</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入监控平台">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="addCategoryHotWord()">保存</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal-show-histtory">
+    <div class="modal-dialog  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">稿件历史</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+
+          </div>
+          <div class="row" id="div-show-histtory">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>标题</th>
+                  <th>字数</th>
+                  <th>操作时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+
+              <tbody id="tb_history">
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/js/select2.full.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- jsGrid -->
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(function () {
+      $("#sel_project").select2({
+        ajax: {
+          url: domainUrl + "/project/geUserProjectList",
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            let newData = [];
+            if (data.code == 200) {
+              for (var i = 0; i < data.data.length; i++) {
+                newData.push({
+                  "id": data.data[i].id,
+                  "text": data.data[i].name
+                });
+              }
+            } else {
+              alert(res.message)
+            }
+            return {
+              results: newData,
+              pagination: {
+                more: (params.page * 10) < data.total
+              }
+            };
+          }
+        }
+
+      });
+      $("#jsGrid1").jsGrid({
+        height: "100%",
+        width: "100%",
+        editing: false,
+        sorting: true,
+        paging: true,
+        pageSize: 20,
+        pageIndex: 1,
+        pageLoading: true,
+        data: [
+        ],
+        autoload: false,
+        controller: {
+          loadData: function (filter) {
+            var d = $.Deferred();
+            var getData = domainUrl + "/manuscript/getList";
+            postMessage(getData, {
+              projectId: $("#sel_project").val(),
+              title: $("#search_title").val(),
+              type: $("#search_type").val(),
+              product: null,
+              checkState: $("#search_check_state").val(),
+              pageIndex: filter.pageIndex,
+              pageSize: filter.pageSize
+            }).then(function (res) {
+              if (res.code == 200) {
+                var newData = {
+                  data: res.data,
+                  itemsCount: res.total
+                }
+                d.resolve(newData);
+              } else {
+                alert(res.message)
+              }
+            })
+            return d.promise();
+          },
+        },
+        onItemDeleted: function (args) {
+          var id = args.item.id;
+          var categoryUrl = domainUrl + "/manuscript/delete?id=" + id;
+          postMessage(categoryUrl, {}).then(function (res) {
+            if (res.code == 200) {
+            } else {
+              alert(res.message);
+              $("#jsGrid1").jsGrid("loadData");
+            }
+          });
+        },
+        onItemUpdated: function (args) {
+          saveCategoryHotWord(args.item);
+        },
+
+        fields: [
+          { name: "id", type: "text", width: 50 },
+          { name: "project", title: "项目", type: "text", width: 50 },
+          { name: "title", title: "标题", type: "text", width: 150 },
+          { name: "auth", title: "作者", type: "text", width: 80 },
+          { name: "type", title: "类型", type: "text", width: 70 },
+          { name: "product", title: "产品", type: "text", width: 70 },
+          { name: "charCount", title: "字数", type: "number", width: 70 },
+          { name: "repeatRate", title: "相似度", type: "text", width: 70 },
+          {
+            itemTemplate: function (_, item) {
+              return $('<a  href="javascript:void(0)" onclick="showWord('+item.id+ ',' + item.maxRepeatRateManuscriptId + ')" class="btn btn-primary btn-sm">查看</a>');
+            },
+            align: "center",
+            title: "相似稿件",
+            width: 70
+          },
+          { name: "url", title: "URL", type: "text", width: 100 },
+          {
+            itemTemplate: function (_, item) {
+              return $('<a target="_blank" href="' + fileUrl + '/' + item.projectId + '/screen/' + item.shotScreenUrl + '" class="btn btn-primary btn-sm">查看</a>');
+            },
+            align: "center",
+            width: 70,
+            title: "截图"
+          },
+          // { name: "shotScreen", title: "截图", type: "text", width: 100 },
+          { name: "isPublish", title: "是否发布", type: "checkbox", width: 40 },
+          {
+            itemTemplate: function (_, item) {
+              return getDateTimeShow(item.createTime);
+            },
+            align: "center",
+            width: 120,
+            title: "创建时间"
+          },
+          { name: '操作', type: "control", width: 40, deleteButton: true, editButton: false },
+          {
+            itemTemplate: function (_, item) {
+              if (item.checkState == 1) {
+                return '待审核';
+              } else if (item.checkState == 2) {
+                return '审核通过';
+              }
+              else if (item.checkState == 3) {
+                return '打回';
+              }
+              return '';
+            },
+            align: "center",
+            width: 50,
+            title: "审核状态"
+          },
+          {
+            itemTemplate: function (_, item) {
+              return $('<a target="_blank" href="' + fileUrl + '/' + item.projectId + '/' + item.savePath + '" class="btn btn-primary btn-sm">下载</a>');
+            },
+            align: "center",
+            width: 70
+          },
+          {
+            itemTemplate: function (_, item) {
+              if (item.checkState == 0 || item.checkState == 3) {
+                return $('<a  href="javascript:void(0)" onclick="setReadyCheck(' + item.id + ')" class="btn btn-primary btn-sm">提交审核</a>');
+              } else {
+                return '';
+              }
+
+            },
+            align: "center",
+            width: 70
+          },
+          {
+            itemTemplate: function (_, item) {
+              return $('<a  href="javascript:void(0)"  onclick="showHistory(' + item.id + ',' + item.projectId + ')"  class="btn btn-primary btn-sm">历史</a>');
+            },
+            align: "center",
+            width: 70
+          },
+        ]
+      });
+      $("#jsGrid1").jsGrid("loadData");
+      //loadKeyWord();
+      loadType();
+    });
+    function loadType() {
+      var categoryUrl = domainUrl + "/manuscriptType/get";
+      getMessage(categoryUrl).then(function (res) {
+        if (res.code == 200) {
+          // $('#search_type').html("");
+          if (res.data == null)
+            return;
+          res.data.forEach(element => {
+            var optionValue = element.id;
+            var optionText = element.name;
+            $('#search_type').append(new Option(optionText, optionValue))
+          });
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+    function loadKeyWord() {
+      var categoryUrl = domainUrl + "/category/admin/get";
+      getMessage(categoryUrl).then(function (res) {
+        if (res.code == 200) {
+          if (res.data == null)
+            return;
+          res.data.forEach(element => {
+            var optionValue = element.id;
+            var optionText = element.name;
+            $('#keyWord').append(new Option(optionText, optionValue));
+            $('#addKeyword').append(new Option(optionText, optionValue));
+          });
+          $("#keyWord").find("option").eq(0).attr("selected", true);
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+    function loadData() {
+      $("#jsGrid1").jsGrid("loadData");
+    }
+    function save(id, categoryId, name) {
+      var saveUrl = domainUrl + "/monitoringPlantform/save";
+      postMessage(saveUrl, {
+        id: id,
+        categoryId: categoryId,
+        name: name
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert("保存成功");
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      })
+    }
+    function saveCategoryHotWord(dataItem) {
+      save(dataItem.id, dataItem.categoryId, dataItem.name);
+    }
+    function addCategoryHotWord() {
+      save(null, $('#addKeyword').val(), $("#name").val());
+    }
+
+    function setReadyCheck(id) {
+      var categoryUrl = domainUrl + "/manuscript/setReadyCheck?id=" + id;
+      postMessage(categoryUrl, {
+        id: id
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert(res.message);
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      });
+    }
+
+    function showHistory(id, projectId) {
+      var categoryUrl = domainUrl + "/manuscriptHistory/getList?mId=" + id;
+      getMessage(categoryUrl).then(function (res) {
+        if (res.code == 200) {
+          var trHtml = "";
+          for (i = 0; i < res.data.length; i++) {
+            var item = res.data[i];
+            var itemHtml = "<tr><td>" +
+              item.title + "</td>" +
+              "<td>" +
+              item.charCount + "</td><td>" +
+              getDateTimeShow(item.createTime)
+              + "</td><td>" +
+              "<a target=\"_blank\" href=\"" + fileUrl + "/" + projectId + "/" + item.savePath + "\" class=\"btn btn-primary btn-sm\">下载</a>" + "</td></tr>"
+            trHtml += itemHtml;
+          }
+          $("#tb_history").html(trHtml);
+          //alert(res.message);
+          $('#modal-show-histtory').modal('show');
+
+          // $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      });
+    }
+    function showWord(currentId,repeatId) {
+      var categoryUrl = domainUrl + "/manuscript/get?id=" + currentId;
+      getMessage(categoryUrl).then(function (res) {
+        if (res.code == 200) {
+          var currentUrl = fileUrl + "/" + res.data.projectId + "/" + res.data.savePath;
+          categoryUrl = domainUrl + "/manuscript/get?id=" + repeatId;
+          getMessage(categoryUrl).then(function (res) {
+            if (res.code == 200) {
+              var repeatUrl = fileUrl + "/" + res.data.projectId + "/" + res.data.savePath;
+              window.open("manuscript-show.html?currentUrl="+urlencode(currentUrl)+"&repeatUrl="+urlencode(repeatUrl));
+            }else {
+          alert(res.message);
+        }
+          });
+       //  let win =    window.open("manuscript-show.html?currentUrl="+urlencode(mURL)+"&repeatUrl="+urlencode(mURL));
+        //  var postdata = {
+        //    type:'loadData',
+        //    data:{
+        //     currentUrl:mURL,
+        //     repeatUrl: mURL
+        //    }
+        //  };
+        //  win.postMessage(postdata,'*');
+    
+            // window.open("https://view.officeapps.live.com/op/view.aspx?src=" +urlencode(mURL));
+        } else {
+          alert(res.message);
+        }
+      });
+    }
+    function urlencode(str) {
+      str = (str + '').toString();
+      return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+    }
+  </script>
+</body>
+
+</html>

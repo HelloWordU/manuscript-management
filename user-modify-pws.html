@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用户信息</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">修改密码</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">修改密码</a></li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="col-sm-6">
+              <div class=""></div>
+
+            </div>
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="txt_pws">用户密码</label>
+                  <input type="password" class="form-control" id="txt_pws" placeholder="请输入用户密码">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="txt_new_pws">新密码</label>
+                  <input type="password" class="form-control" id="txt_new_pws" placeholder="请输入新密码">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="txt_confirm_pws">确认密码</label>
+                  <input type="password" class="form-control" id="txt_confirm_pws" placeholder="请确认新密码">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer">
+            <button type="button" class="btn btn-primary" onclick="save();">确认</button>
+          </div>
+        </div>
+        <!-- /.card -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- ./wrapper -->
+  </div>
+
+
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Page specific script -->
+  <script>
+    function save() {
+      var passWord = $("#txt_pws").val();
+      var newPassWord = $("#txt_new_pws").val();
+      var newPassWordConfirm = $("#txt_confirm_pws").val();
+      if($.trim(passWord)==undefined || $.trim(passWord)=="")
+      {
+        alert("请输入密码");
+        return;
+      }
+      if($.trim(newPassWord)==undefined || $.trim(newPassWord)=="")
+      {
+        alert("请输入新密码");
+        return;
+      }
+      if($.trim(newPassWordConfirm)==undefined || $.trim(newPassWordConfirm)=="")
+      {
+        alert("请确认新密码");
+        return;
+      }
+      if(newPassWord!=newPassWordConfirm)
+      {
+        alert("两次输入的新密码不一致");
+        return;
+      }
+      var categoryUrl = domainUrl + "/user/modifyPwd";
+      postMessage(categoryUrl, {
+        passWord: passWord,
+        newPassWord: newPassWord,
+        newPassWordConfirm: newPassWordConfirm
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert(res.message);
+        } else {
+          alert(res.message);
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

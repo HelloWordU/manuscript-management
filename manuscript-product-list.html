@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>稿件产品列表</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">稿件产品列表</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">稿件产品列表</a></li>
+                <li class="breadcrumb-item active">功能管理</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="keyWord">项目</label>
+                <select onchange="loadData();" id="keyWord" name="keyWord"></select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
+                  class="btn btn-primary btn-sm"><i class="fa fa-copy"></i> 新增</a>
+              </div>
+            </div>
+
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- ./wrapper -->
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">新增项目产品</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="addKeyword">项目</label>
+                <select id="addKeyword" name="addKeyword"></select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="name">产品</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入产品">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="addCategoryHotWord()">保存</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- jsGrid -->
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(function () {
+      $("#jsGrid1").jsGrid({
+        height: "100%",
+        width: "100%",
+        editing: true,
+        sorting: true,
+        paging: true,
+        data: [
+        ],
+        autoload: false,
+        controller: {
+          loadData: function () {
+            var d = $.Deferred();
+            var getData = domainUrl + "/projectProduct/get?projectId=" + $("#keyWord").val();
+            getMessage(getData).then(function (res) {
+              if (res.code == 200) {
+                d.resolve(res.data);
+              } else {
+                alert(res.message)
+              }
+            })
+            return d.promise();
+          },
+        },
+        onItemDeleted: function (args) {
+          var id = args.item.id;
+          var categoryUrl = domainUrl + "/projectProduct/delete?id=" + id;
+          postMessage(categoryUrl, {}).then(function (res) {
+            if (res.code == 200) {
+            } else {
+              alert(res.message);
+              $("#jsGrid1").jsGrid("loadData");
+            }
+          });
+        },
+        onItemUpdated: function (args) {
+          saveCategoryHotWord(args.item);
+        },
+
+        fields: [
+          { name: "id", type: "text", width: 50 },
+          { name: "name", title: "名称", type: "text", width: 50 },
+          { name: '操作', type: "control", width: 80  }
+        ]
+      });
+      loadKeyWord();
+    });
+    function loadKeyWord() {
+      var categoryUrl = domainUrl + "/project/getList";
+      postMessage(categoryUrl, {}).then(function (res) {
+        if (res.code == 200) {
+          if (res.data == null)
+            return;
+          res.data.forEach(element => {
+            var optionValue = element.id;
+            var optionText = element.name;
+            $('#keyWord').append(new Option(optionText, optionValue));
+            $('#addKeyword').append(new Option(optionText, optionValue));
+          });
+          $("#keyWord").find("option").eq(0).attr("selected", true);
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+    function loadData() {
+      $("#jsGrid1").jsGrid("loadData");
+    }
+    function save(id, projectId, name) {
+      var saveUrl = domainUrl + "/projectProduct/save";
+      postMessage(saveUrl, {
+        id: id,
+        projectId: projectId,
+        name: name
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert("保存成功");
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+        }
+      })
+    }
+    function saveCategoryHotWord(dataItem) {
+      save(dataItem.id, dataItem.projectId, dataItem.name);
+    }
+    function addCategoryHotWord() {
+      save(null, $('#addKeyword').val(), $("#name").val());
+    }
+  </script>
+</body>
+
+</html>

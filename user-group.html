@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用户分组</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">用户分组</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">用户分组</a></li>
+                <li class="breadcrumb-item active">用户管理</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="col-sm-6">
+              <div class=""></div>
+              <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
+                class="btn btn-primary btn-sm"><i class="fa fa-copy"></i> 新增</a>
+            </div>
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- ./wrapper -->
+
+
+    <div class="modal fade" id="modal-default">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">新增分组</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name">分组名</label>
+                  <input type="text" class="form-control" id="name" placeholder="请输入分组名">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="save();">保存</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="modal-setting-project">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">设置分组项目</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name">选择项目</label>
+                  <select class="form-control select2bs4" id="sel_project" multiple="multiple"
+                    data-placeholder="Select a project" style="width: 100%;">
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="saveGroupProject();">保存</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+
+    <div class="modal fade" id="modal-setting-user">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">设置分组人员</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name">分组人员选择</label>
+                  <select class="form-control select2bs4" id="sel_user" multiple="multiple"
+                    data-placeholder="Select a project" style="width: 100%;">
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="saveGroupUser();">保存</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <input type="hidden" id="hid_group_id" />
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 -->
+    <script src="plugins/select2/js/select2.full.min.js"></script>
+    <!-- AdminLTE -->
+    <script src="dist/js/adminlte.js"></script>
+    <script src="plugins/jsgrid/jsgrid.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="dist/js/common.js"></script>
+    <!-- Page specific script -->
+    <script>
+      var projectData = {};
+      $(function () {
+
+        $("#sel_project").select2({
+          ajax: {
+            url: domainUrl + "/project/geAllProjectList",
+            data: function (params) {
+              return {
+                q: params.term, // search term
+                page: params.page || 1,
+              };
+            },
+            processResults: function (data, params) {
+              params.page = params.page || 1;
+              let newData = [];
+              if (data.code == 200) {
+                for (var i = 0; i < data.data.length; i++) {
+                  newData.push({
+                    "id": data.data[i].id,
+                    "text": data.data[i].name
+                  });
+                }
+              } else {
+                alert(res.message)
+              }
+              return {
+                results: newData,
+                pagination: {
+                  more: (params.page * 10) < data.total
+                }
+              };
+            }
+          }
+
+        });
+        $("#sel_user").select2({
+          ajax: {
+            url: domainUrl + "/user/getAllUserList",
+            data: function (params) {
+              return {
+                q: params.term, // search term
+                page: params.page || 1
+              };
+            },
+            processResults: function (data, params) {
+              params.page = params.page || 1;
+              let newData = [];
+              if (data.code == 200) {
+                for (var i = 0; i < data.data.length; i++) {
+                  newData.push({
+                    "id": data.data[i].id,
+                    "text": data.data[i].realName
+                  });
+                }
+              } else {
+                alert(res.message)
+              }
+              return {
+                results: newData,
+                pagination: {
+                  more: (params.page * 10) < data.total
+                }
+              };
+            }
+          }
+
+        });
+
+        $("#jsGrid1").jsGrid({
+          height: "100%",
+          width: "100%",
+          autoload: true,
+          editing: false,
+          sorting: true,
+          paging: true,
+          data: [
+            // {name:"华为组",project:"华为项目",users:"王猛、赵梦涵",}
+          ],
+          controller: {
+            loadData: function () {
+              var d = $.Deferred();
+              var categoryUrl = domainUrl + "/userGroup/getList";
+              postMessage(categoryUrl, {}).then(function (res) {
+                if (res.code == 200) {
+                  d.resolve(res.data);
+                } else {
+                  alert(res.message)
+                }
+              })
+              return d.promise();
+            },
+          },
+          onItemDeleted: function (args) {
+            var id = args.item.id;
+            var categoryUrl = domainUrl + "/userGroup/delete?id=" + id;
+            postMessage(categoryUrl, {}).then(function (res) {
+              if (res.code == 200) {
+              } else {
+                alert(res.message);
+                $("#jsGrid1").jsGrid("loadData");
+              }
+            });
+          },
+          onItemUpdated: function (args) {
+            saveUser(args.item.id, args.item.name);
+          },
+          fields: [
+            // { name: "id", type: "number", width: 50 },
+            { name: "name", title: "分组名称", type: "text", width: 150 },
+            { name: "projectName", title: "项目", type: "text", width: 150, readOnly: true },
+            { name: "userName", title: "人员", type: "text", width: 150, readOnly: true },
+            { name: '操作', type: "control", width: 80, }, //editButton: false, 
+            {
+              itemTemplate: function (_, item) {
+                return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">项目设置</a>')
+                  .on("click", function () {
+                    showSelectProject(item);
+                    // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                  });
+              },
+              align: "center",
+              width: 50
+            },
+            {
+              itemTemplate: function (_, item) {
+                return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">人员设置</a>')
+                  .on("click", function () {
+                    showSelectUser(item);
+                    // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                  });
+              },
+              align: "center",
+              width: 50
+            },
+          ]
+        });
+      });
+
+      function save() {
+        saveUser(null, $("#name").val());
+      }
+      function saveUser(id, name) {
+        var categoryUrl = domainUrl + "/userGroup/add";
+        postMessage(categoryUrl, {
+          id: id,
+          name: name
+        }).then(function (res) {
+          if (res.code == 200) {
+            alert("保存成功");
+            $("#jsGrid1").jsGrid("loadData");
+          } else {
+            alert(res.message);
+            $("#jsGrid1").jsGrid("loadData");
+          }
+        });
+      }
+
+      function showSelectProject(item) {
+        $("#hid_group_id").val(item.id);
+        var categoryUrl = domainUrl + "/userGroup/getGroupProject?groupId=" + item.id;
+        postMessage(categoryUrl, {
+        }).then(function (res) {
+          if (res.code == 200) {
+            $("#sel_project").empty();
+            var values = [];
+            $.each(res.data, function (i, item) {
+              $("#sel_project").append("<option value='" + item.projectId + "'>&nbsp;" + item.projectName + "</option>");
+              values.push(item.projectId);
+            });
+            $($("#sel_project")).val(values);
+            $('#modal-setting-project').modal('show');
+            //$("#jsGrid1").jsGrid("loadData");
+          } else {
+            alert(res.message);
+            // $("#jsGrid1").jsGrid("loadData");
+          }
+        });
+
+      }
+      function showSelectUser(item) {
+        $("#hid_group_id").val(item.id);
+        var categoryUrl = domainUrl + "/userGroup/getGroupUser?groupId=" + item.id;
+        postMessage(categoryUrl, {
+        }).then(function (res) {
+          if (res.code == 200) {
+            $("#sel_user").empty();
+            var values = [];
+            $.each(res.data, function (i, item) {
+              $("#sel_user").append("<option value='" + item.userId + "'>&nbsp;" + item.userName + "</option>");
+              values.push(item.userId);
+            });
+            $($("#sel_user")).val(values);
+            $('#modal-setting-user').modal('show');
+            //$("#jsGrid1").jsGrid("loadData");
+          } else {
+            alert(res.message);
+            // $("#jsGrid1").jsGrid("loadData");
+          }
+        });
+    
+      }
+      function saveGroupProject() {
+        var projectIds = $("#sel_project").val();
+        if (projectIds.length < 1) {
+          alert("请选择项目");
+          return;
+        }
+
+        var categoryUrl = domainUrl + "/userGroup/saveGroupProject";
+        postMessage(categoryUrl, {
+          groupId: $("#hid_group_id").val(),
+          projectIds: projectIds,
+        }).then(function (res) {
+          if (res.code == 200) {
+            alert(res.message);
+            $("#jsGrid1").jsGrid("loadData");
+
+          } else {
+            alert(res.message);
+            // $("#jsGrid1").jsGrid("loadData");
+          }
+        });
+    
+
+      }
+
+      function saveGroupUser() {
+        var userIds = $("#sel_user").val();
+        if (userIds.length < 1) {
+          alert("请选择人员");
+          return;
+        }
+
+        var categoryUrl = domainUrl + "/userGroup/saveGroupUser";
+        postMessage(categoryUrl, {
+          groupId: $("#hid_group_id").val(),
+          userIds: userIds,
+        }).then(function (res) {
+          if (res.code == 200) {
+            alert(res.message);
+            $("#jsGrid1").jsGrid("loadData");
+
+          } else {
+            alert(res.message);
+            // $("#jsGrid1").jsGrid("loadData");
+          }
+        });
+        $("#jsGrid1").jsGrid("loadData");
+      }
+    </script>
+</body>
+
+</html>

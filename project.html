@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>项目基本信息</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+  <!-- Bootstrap4 Duallistbox -->
+  <link rel="stylesheet" href="plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- dropzonejs -->
+  <link rel="stylesheet" href="plugins/dropzone/min/dropzone.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">项目列表</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">项目列表</a></li>
+                <li class="breadcrumb-item active">撰写管理</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="col-sm-6">
+              <div class=""></div>
+              <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default" onclick="showAdd();"
+                class="btn btn-primary btn-sm"><i class="fa fa-copy"></i> 新增</a>
+            </div>
+            <div class="card-header">
+              <div class="row">
+                <div class="col-3">
+                  <select class="form-control select2bs4" id="sel_project" data-placeholder="项目" style="width: 100%;">
+                  </select>
+                </div>
+                <div class="col-3">
+                  <div class="input-group date" id="div_search_begin_date" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" id="search_begin_date"
+                      name="monitoringDate" data-target="#div_search_begin_date" />
+                    <div class="input-group-append" data-target="#div_search_begin_date" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                  </div>
+                  <!-- <input type="text" class="form-control" id="search_begin_date" placeholder="开始日期"> -->
+                </div>
+                <div class="col-3">
+                  <div class="input-group date" id="div_search_end_date" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" id="search_end_date"
+                      name="monitoringDate" data-target="#div_search_end_date" />
+                    <div class="input-group-append" data-target="#div_search_end_date" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                  </div>
+                  <!-- <input type="text" class="form-control" id="search_end_date"  placeholder="结束日期"> -->
+                </div>
+                <div class="col-3">
+                  <a href="javascript:void(0)" onclick="searchData();" class="btn btn-primary btn-sm"><i
+                      class="fa fa-search"></i>查询</a>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- ./wrapper -->
+  </div>
+
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">新增项目</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="projectName">项目名称</label>
+                <input type="text" class="form-control" id="projectName" placeholder="请输入项目名称">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="manuscriptCount">稿件数量</label>
+                <input type="number" class="form-control" id="manuscriptCount" placeholder="请输入稿件数量">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>开始日期</label>
+                <div class="input-group date" id="beginDate" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" id="txt_begin_date" name="monitoringDate"
+                    data-target="#beginDate" />
+                  <div class="input-group-append" data-target="#beginDate" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>结束日期</label>
+                <div class="input-group date" id="endDate" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" id="txt_end_date" name="monitoringDate"
+                    data-target="#endDate" />
+                  <div class="input-group-append" data-target="#endDate" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="save();">保存</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+
+  <div class="modal fade" id="modal-import">
+    <div class="modal-dialog  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">导入稿件</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-default">
+                <div class="card-header">
+                  <h3 class="card-title">稿件上传</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="manuscript_type">稿件类型</label>
+                        <select type="text" class="form-control" id="manuscript_type">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="manuscript_product">稿件产品</label>
+                        <select type="text" class="form-control" id="manuscript_product">
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="actions" class="row">
+                    <div class="col-lg-6">
+                      <div class="btn-group w-100">
+                        <span class="btn btn-success col fileinput-button dz-clickable">
+                          <i class="fas fa-plus"></i>
+                          <span>增加</span>
+                        </span>
+                        <button type="submit" class="btn btn-primary col start">
+                          <i class="fas fa-upload"></i>
+                          <span>上传</span>
+                        </button>
+                        <button type="reset" class="btn btn-warning col cancel">
+                          <i class="fas fa-times-circle"></i>
+                          <span>取消</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 d-flex align-items-center">
+                      <div class="fileupload-process w-100">
+                        <div id="total-progress" class="progress progress-striped active" role="progressbar"
+                          aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                          <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress="">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table table-striped files" id="previews">
+                    <div id="template" class="row mt-2">
+                      <div class="col-auto">
+                        <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+                      </div>
+                      <div class="col d-flex align-items-center">
+                        <p class="mb-0">
+                          <span class="lead" data-dz-name></span>
+                          (<span data-dz-size></span>)
+                        </p>
+                        <strong class="error text-danger" data-dz-errormessage></strong>
+                      </div>
+                      <div class="col-4 d-flex align-items-center">
+                        <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0"
+                          aria-valuemax="100" aria-valuenow="0">
+                          <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-auto d-flex align-items-center">
+                        <div class="btn-group">
+                          <button class="btn btn-primary start">
+                            <i class="fas fa-upload"></i>
+                            <span>Start</span>
+                          </button>
+                          <button data-dz-remove class="btn btn-warning cancel">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Cancel</span>
+                          </button>
+                          <button data-dz-remove class="btn btn-danger delete">
+                            <i class="fas fa-trash"></i>
+                            <span>Delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+
+
+  <div class="modal fade" id="modal-create-new-order">
+    <div class="modal-dialog  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">新建发布</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="sel_supplier">供应商</label>
+                <select class="form-control select2bs4" id="sel_supplier" data-placeholder="Select"
+                  style="width: 100%;">
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label>选择稿件</label>
+                <select class="form-control select2bs4" id="sel_manuscript" multiple="multiple"
+                  data-placeholder="Select a State" style="width: 100%;">
+                </select>
+              </div>
+              <!-- /.form-group -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="createOrder()">保存</button>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+
+  <input type="hidden" id="hid_project_id" />
+
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- Select2 -->
+  <script src="plugins/select2/js/select2.full.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <!-- Bootstrap4 Duallistbox -->
+  <script src="plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- dropzonejs -->
+  <script src="plugins/dropzone/min/dropzone.min.js"></script>
+  <!-- InputMask -->
+  <script src="plugins/moment/moment.min.js"></script>
+  <!-- Tempusdominus Bootstrap 4 -->
+  <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+  <!-- Page specific script -->
+  <script>
+    var projectData = {};
+    var gridObj;
+    $(function () {
+      $("#sel_project").select2({
+        ajax: {
+          url: domainUrl + "/project/geUserProjectList",
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            let newData = [];
+            if (data.code == 200) {
+              for (var i = 0; i < data.data.length; i++) {
+                newData.push({
+                  "id": data.data[i].id,
+                  "text": data.data[i].name
+                });
+              }
+            } else {
+              alert(res.message)
+            }
+            return {
+              results: newData,
+              pagination: {
+                more: (params.page * 10) < data.total
+              }
+            };
+          }
+        }
+
+      });
+      $("#sel_supplier").select2({
+        ajax: {
+          url: domainUrl + "/supplier/getSearchList",
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            let newData = [];
+            if (data.code == 200) {
+              for (var i = 0; i < data.data.length; i++) {
+                newData.push({
+                  "id": data.data[i].id,
+                  "text": data.data[i].realName
+                });
+              }
+            } else {
+              alert(res.message)
+            }
+            return {
+              results: newData,
+              pagination: {
+                more: (params.page * 10) < data.total
+              }
+            };
+          }
+        }
+
+      });
+
+      $("#sel_manuscript").select2({
+        ajax: {
+          url: domainUrl + "/manuscript/getWaitOrderList",
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              page: params.page || 1,
+              projectId: $('#hid_project_id').val()
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            let newData = [];
+            if (data.code == 200) {
+              for (var i = 0; i < data.data.length; i++) {
+                newData.push({
+                  "id": data.data[i].id,
+                  "text": data.data[i].title
+                });
+              }
+            } else {
+              alert(res.message)
+            }
+            return {
+              results: newData,
+              pagination: {
+                more: (params.page * 10) < data.total
+              }
+            };
+          }
+        }
+
+      });
+
+      $('#div_search_begin_date').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'zh-CN'
+      });
+      $('#div_search_end_date').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'zh-CN'
+      });
+      //Date picker
+      $('#beginDate').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'zh-CN'
+      });
+      //Date picker
+      $('#endDate').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'zh-CN'
+      });
+      //Bootstrap Duallistbox
+      //$('.duallistbox').bootstrapDualListbox();
+      gridObj = $("#jsGrid1").jsGrid({
+        height: "100%",
+        width: "100%",
+        editing: false,
+        sorting: true,
+        paging: true,
+        pageSize: 20,
+        pageIndex: 1,
+        pageLoading: true,
+        data: [
+        ],
+        autoload: true,
+        controller: {
+          loadData: function (filter) {
+            var d = $.Deferred();
+            var categoryUrl = domainUrl + "/project/getPageList";
+            postMessage(categoryUrl, {
+              projectId: $("#sel_project").val(),
+              beginDate: $("#search_begin_date").val(),
+              endDate: $("#search_end_date").val(),
+              pageSize: filter.pageSize,
+              pageIndex: filter.pageIndex
+            }).then(function (res) {
+              if (res.code == 200) {
+                var newData = {
+                  data: res.data,
+                  itemsCount: res.total
+                }
+                d.resolve(newData);
+              } else {
+                alert(res.message)
+              }
+            })
+            return d.promise();
+          },
+        },
+        onItemDeleted: function (args) {
+          var id = args.item.id;
+          var categoryUrl = domainUrl + "/project/delete?id=" + id;
+          postMessage(categoryUrl, {}).then(function (res) {
+            if (res.code == 200) {
+            } else {
+              alert(res.message);
+              $("#jsGrid1").jsGrid("loadData");
+            }
+          });
+        },
+        onItemUpdated: function (args) {
+          saveCategory(args.item.id, args.item.name, args.item.beginDt);
+        },
+        fields: [
+          // { name: "id", type: "number", width: 50 },
+          { name: "name", title: "项目名称", type: "text", width: 80 },
+          { name: "beginDt", title: "开始日期", type: "text", width: 80 },
+          { name: "endDt", title: "结束日期", type: "text", width: 80 },
+          { name: "planNumber", title: "稿件数量", type: "text", width: 80 },
+          { name: "publishNumber", title: "发布数量", type: "text", width: 80 },
+          { name: "orderNumber", title: "订单数量", type: "text", width: 80 },
+          { name: '操作', type: "control", width: 40, deleteButton: true, editButton: false },
+          {
+            itemTemplate: function (_, item) {
+              return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">上传稿件</a>')
+                .on("click", function () {
+                  $('#hid_project_id').val(item.id);
+                  loadType();
+                  loadProduct();
+                  $('#modal-import').modal('show');
+                  // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                });
+            },
+            align: "center",
+            width: 50
+          },
+          {
+            itemTemplate: function (_, item) {
+              return $('<a href="javascript:void(0)" class="btn btn-primary btn-sm">新建发布</a>')
+                .on("click", function () {
+                  $('#hid_project_id').val(item.id);
+                  $('#modal-create-new-order').modal('show');
+                  // $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                });
+            },
+            align: "center",
+            width: 50
+          },
+
+          // { type: "control", width: 80 }
+        ]
+      });
+      $("#jsGrid1").jsGrid("loadData");
+      // queryProject();
+    });
+    function searchData() {
+      $("#jsGrid1").jsGrid("loadData");
+    }
+    function queryProject() {
+      var projectUrl = domainUrl + "/project/get";
+      getMessage(projectUrl).then(function (res) {
+        if (res.code == 200) {
+          if (res.data != null) {
+            projectData = res.data;
+          }
+
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+    function save() {
+      saveCategory(null, $("#projectName").val(), $("#txt_begin_date").val(), $("#txt_end_date").val(), $("#manuscriptCount").val());
+    }
+    function saveCategory(id, name, beginDate, endDate, manuscriptCount) {
+      if(beginDate==null)
+      {
+        alert("请选择项目开始日期");
+        return;
+      }
+      if(endDate==null)
+      {
+        alert("请选择项目结束日期");
+        return;
+      }
+      var categoryUrl = domainUrl + "/project/save";
+      postMessage(categoryUrl, {
+        id: id,
+        name: name,
+        beginDate: beginDate,
+        endDate: endDate,
+        manuscriptCount: manuscriptCount
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert(res.message);
+          $("#jsGrid1").jsGrid("loadData");
+        } else {
+          alert(res.message);
+          $("#jsGrid1").jsGrid("loadData");
+        }
+      });
+    }
+
+    function loadType() {
+      var categoryUrl = domainUrl + "/manuscriptType/get";
+      getMessage(categoryUrl).then(function (res) {
+        if (res.code == 200) {
+          $('#manuscript_type').html("");
+          if (res.data == null)
+            return;
+          res.data.forEach(element => {
+            var optionValue = element.id;
+            var optionText = element.name;
+            $('#manuscript_type').append(new Option(optionText, optionValue))
+          });
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+    function loadProduct() {
+      var categoryUrl = domainUrl + "/projectProduct/get?projectId=" + $("#hid_project_id").val();
+      getMessage(categoryUrl).then(function (res) {
+        if (res.code == 200) {
+          $('#manuscript_product').html("");
+          if (res.data == null)
+            return;
+          res.data.forEach(element => {
+            var optionValue = element.id;
+            var optionText = element.name;
+            $('#manuscript_product').append(new Option(optionText, optionValue))
+          });
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+    function createOrder() {
+      var categoryUrl = domainUrl + "/order/save";
+      var supplierId = $("#sel_supplier").val();
+      if (supplierId == "") {
+        alert("请选择一个供应商");
+        return;
+      }
+      var manuscriptList = $("#sel_manuscript").val();
+      if (manuscriptList.length < 1) {
+        alert("请选择一个下单稿件");
+        return;
+      }
+      postMessage(categoryUrl, {
+        projectId: $("#hid_project_id").val(),
+        supplierId: supplierId,
+        manuscriptIdList: manuscriptList
+      }).then(function (res) {
+        if (res.code == 200) {
+          alert(res.message);
+        } else {
+          alert(res.message);
+        }
+      });
+    }
+    // DropzoneJS Demo Code Start
+    Dropzone.autoDiscover = false
+
+    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+    var previewNode = document.querySelector("#template")
+    previewNode.id = ""
+    var previewTemplate = previewNode.parentNode.innerHTML
+    previewNode.parentNode.removeChild(previewNode)
+
+    var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+      url: domainUrl + "/manuscript/upload?projectId=1", // Set the url
+      thumbnailWidth: 80,
+      thumbnailHeight: 80,
+      parallelUploads: 20,
+      previewTemplate: previewTemplate,
+      acceptedFiles: ".doc,.docx",
+      autoQueue: false, // Make sure the files aren't queued until manually added
+      previewsContainer: "#previews", // Define the container to display the previews
+      clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+    })
+
+    myDropzone.on("addedfile", function (file) {
+      // Hookup the start button
+      file.previewElement.querySelector(".start").onclick = function () { myDropzone.enqueueFile(file) }
+    })
+    myDropzone.on("success", function (file, response) {
+      // Hookup the start button
+      //alert(response.message);
+      $("#jsGrid1").jsGrid("loadData");
+    })
+
+    // Update the total progress bar
+    myDropzone.on("totaluploadprogress", function (progress) {
+      document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
+    })
+
+    myDropzone.on("sending", function (file, xhr, formData) {
+      if($("#manuscript_product").val()=="" || $("#manuscript_product").val()==null)
+      {
+        alert("请先设置稿件产品");
+        myDropzone.canceled();
+        return;
+      }
+      formData.append("type", $("#manuscript_type").val());
+      formData.append("projectId", $('#hid_project_id').val());
+      formData.append("product", $("#manuscript_product").val());
+      // Show the total progress bar when upload starts
+      document.querySelector("#total-progress").style.opacity = "1"
+      // And disable the start button
+      file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
+    })
+
+    // Hide the total progress bar when nothing's uploading anymore
+    myDropzone.on("queuecomplete", function (progress) {
+      alert("操作成功");
+      document.querySelector("#total-progress").style.opacity = "0"
+    })
+
+    // Setup the buttons for all transfers
+    // The "add files" button doesn't need to be setup because the config
+    // `clickable` has already been specified.
+    document.querySelector("#actions .start").onclick = function () {
+      myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
+    }
+    document.querySelector("#actions .cancel").onclick = function () {
+      myDropzone.removeAllFiles(true)
+    }
+  // DropzoneJS Demo Code End
+
+  </script>
+</body>
+
+</html>
