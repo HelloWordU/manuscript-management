@@ -184,7 +184,7 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper iframe-mode" data-widget="iframe" data-loading-screen="750">
+    <div class="content-wrapper iframe-mode" data-widget="iframe"  data-loading-screen="750">
       <div class="nav navbar navbar-expand navbar-white navbar-light border-bottom p-0">
         <a class="nav-link bg-light" href="#" data-widget="iframe-scrollleft"><i
             class="fas fa-angle-double-left"></i></a>
@@ -296,14 +296,31 @@
   <script src="dist/js/common.js"></script>
   <script type="text/javascript">
     $(function () {
-
+      // $('.content-wrapper').IFrame({
+      //   onTabClick(item) {
+      //     return item;
+      //   },
+      //   onTabChanged(item) {
+      //     return item;
+      //   },
+      //   onTabCreated(item) {
+      //     return item;
+      //   },
+      //   autoIframeMode: true,
+      //   autoItemActive: true,
+      //   autoShowNewTab: true,
+      //   autoDarkMode: false,
+      //   allowDuplicates: true,
+      //   loadingScreen: 750,
+      //   useNavbarItems: true
+      // });
       var useUrl = domainUrl + "/menu/getUserList";
       postMessage(useUrl, {}).then(function (res) {
         if (res.code == 200) {
           var menuHtml = '';
           for (var i = 0; i < res.data.length; i++) {
             var item = res.data[i];
-            menuHtml += creatMenu(item);
+            menuHtml += creatMenu(item, 0);
           }
           menuHtml += '<li class="nav-item">';
           menuHtml += '<a href="./user-modify-pws.html" class="nav-link">';
@@ -330,11 +347,16 @@
       getUserInfo();
 
     });
-    function creatMenu(item) {
+    function creatMenu(item, index) {
       var res = "";
       res += '<li class="nav-item">';
       res += '<a href="' + item.url + '" class="nav-link">';
-      res += '<i class="nav-icon fas ' + item.ico + '"></i>';
+      if (index == 0) {
+        res += '<i class="nav-icon fas ' + item.ico + '"></i>';
+      } else {
+        res += '<i class="nav-icon far ' + item.ico + '"></i>';
+      }
+
       res += '<p>';
       res += item.name;
       if (item.child != null && item.child.length > 0) {
@@ -342,8 +364,9 @@
         res += '</p>';
         res += '</a>';
         res += '<ul class="nav nav-treeview">';
+        index++;
         for (var j = 0; j < item.child.length; j++) {
-          res += creatMenu(item.child[j]);
+          res += creatMenu(item.child[j], index);
         }
         res += '</ul>';
       } else {
@@ -386,6 +409,9 @@
           alert(res.message)
         }
       })
+    }
+    function createTab(title, link, uniqueName) {
+      $('.content-wrapper').IFrame('createTab', title, link, uniqueName, true);
     }
   </script>
 </body>

@@ -295,10 +295,29 @@
             title: "相似稿件",
             width: 70
           },
-          { name: "url", title: "URL", type: "text", width: 100 },
+          { itemTemplate: function (_, item) {
+            if(item.url==null || item.url=="")
+            {
+              return '暂无数据';
+            }else
+            {
+              return $('<a target="_blank" href="' +  item.url + '" class="btn btn-primary btn-sm">点击查看</a>');
+            }
+            
+            },
+            align: "center",
+            width: 70,
+            title: "Url" },
           {
             itemTemplate: function (_, item) {
-              return $('<a target="_blank" href="' + fileUrl + '/' + item.projectId + '/screen/' + item.shotScreenUrl + '" class="btn btn-primary btn-sm">查看</a>');
+              if(item.shotScreenUrl==null || item.shotScreenUrl=="")
+              {
+                return '暂无';
+              }else
+              {
+                return $('<a target="_blank" href="' + fileUrl + '/' + item.projectId + '/screen/' + item.shotScreenUrl + '" class="btn btn-primary btn-sm">查看</a>');
+              }
+
             },
             align: "center",
             width: 70,
@@ -343,7 +362,7 @@
               if (item.checkState == 0 || item.checkState == 3) {
                 return $('<a  href="javascript:void(0)" onclick="setReadyCheck(' + item.id + ')" class="btn btn-primary btn-sm">提交审核</a>');
               } else {
-                return '';
+                return '审核中';
               }
 
             },

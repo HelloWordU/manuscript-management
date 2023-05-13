@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>网络热词</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+</head>
+
+<body class="hold-transition layout-fixed layout-navbar-fixed layout-footer-fixed">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-article">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">网络热词</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">网络热词</a></li>
+                <li class="breadcrumb-item active">网络热词</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <h5 class="mb-2 mt-4">数据统计</h5>
+          <div class="row">
+            <div class="col-md-4">
+              <!-- Widget: user widget style 2 -->
+              <div class="card card-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-info">
+                  <div class="widget-user-image">
+                    <img class="img-circle elevation-2" src="../dist/img/baidu.JPG" alt="User Avatar">
+                  </div>
+                  <!-- /.widget-user-image -->
+                  <h3 class="widget-user-username">百度</h3>
+                  <h6 class="widget-user-desc">更新时间:<span id="baiduDt">2023-05-06 11:11:00</span></h6>
+                </div>
+                <div class="card-footer p-0">
+                  <ul class="nav flex-column" id="baiduContentUl">
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        “硬核”成果夯实数字大厦底座 <span class="float-right badge bg-primary">31</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        旅美大熊猫“丫丫”专机已降落上海 <span class="float-right badge bg-info">5</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        Completed Projects <span class="float-right badge bg-success">12</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.widget-user -->
+            </div>
+            <div class="col-md-4">
+              <!-- Widget: user widget style 2 -->
+              <div class="card card-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-info">
+                  <div class="widget-user-image">
+                    <img class="img-circle elevation-2" src="../dist/img/weibo.JPG" alt="User Avatar">
+                  </div>
+                  <!-- /.widget-user-image -->
+                  <h3 class="widget-user-username">微博</h3>
+                  <h6 class="widget-user-desc">更新时间:<span id="weiboDt">2023-05-06 11:11:00</span></h6>
+                </div>
+                <div class="card-footer p-0">
+                  <ul class="nav flex-column" id="weiboContentUl">
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        Projects <span class="float-right badge bg-primary">31</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        Tasks <span class="float-right badge bg-info">5</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        Completed Projects <span class="float-right badge bg-success">12</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        Followers <span class="float-right badge bg-danger">842</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.widget-user -->
+            </div>
+            <div class="col-md-4">
+              <!-- Widget: user widget style 2 -->
+              <div class="card card-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-info">
+                  <div class="widget-user-image">
+                    <img class="img-circle elevation-2" src="../dist/img/toutiao.JPG" alt="User Avatar">
+                  </div>
+                  <!-- /.widget-user-image -->
+                  <h3 class="widget-user-username">头条</h3>
+                  <h6 class="widget-user-desc">更新时间:<span id="toutiaoDt">2023-05-06 11:11:00</span></h6>
+                </div>
+                <div class="card-footer p-0">
+                  <ul class="nav flex-column" id="toutiaoContentUl">
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        Projects <span class="float-right badge bg-primary">31</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" target="_blank" class="nav-link">
+                        Tasks <span class="float-right badge bg-info">5</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        Completed Projects <span class="float-right badge bg-success">12</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        Followers <span class="float-right badge bg-danger">842</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.widget-user -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+      </div>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE -->
+    <script src="dist/js/adminlte.js"></script>
+    <!-- OPTIONAL SCRIPTS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <!-- <script src="dist/js/demo.js"></script> -->
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="dist/js/pages/dashboard3.js"></script>
+    <script src="dist/js/common.js"></script>
+    <script>
+      $(function () {
+        loadBaiduHot();
+        loadWeiboHot();
+        loadToutiaoHot();
+      });
+      function loadBaiduHot() {
+        var url = domainUrl + "/netHot/getByType?type=1";
+        getMessage(url).then(function (res) {
+          if (res.code == 200) {
+            var trHtml = "";
+            var lastTime = "";
+            for (i = 0; i < res.data.length; i++) {
+              trHtml += "<li class=\"nav-item\">";
+              trHtml += "<a href=\"" + res.data[i].linkUrl + "\" target=\"_blank\"  class=\"nav-link\">";
+              trHtml += res.data[i].hotWord + "<span class=\"float-right badge bg-info\">" + res.data[i].sortIndex + "</span>";
+              trHtml += "</a>";
+              trHtml += "</li>";
+              lastTime = res.data[i].lastModifyTime;
+            }
+            $("#baiduContentUl").html(trHtml);
+            $("#baiduDt").html(getDateTimeShow(lastTime));
+          } else {
+            alert(res.message);
+          }
+        });
+      }
+      function loadWeiboHot() {
+        var url = domainUrl + "/netHot/getByType?type=2";
+        getMessage(url).then(function (res) {
+          if (res.code == 200) {
+            var trHtml = "";
+            var lastTime = "";
+            for (i = 0; i < res.data.length; i++) {
+              trHtml += "<li class=\"nav-item\">";
+              trHtml += "<a href=\"" + res.data[i].linkUrl + "\" target=\"_blank\"  class=\"nav-link\">";
+              trHtml += res.data[i].hotWord + "<span class=\"float-right badge bg-info\">" + res.data[i].sortIndex + "</span>";
+              trHtml += "</a>";
+              trHtml += "</li>";
+              lastTime = res.data[i].lastModifyTime;
+            }
+            $("#weiboContentUl").html(trHtml);
+            $("#weiboDt").html(getDateTimeShow(lastTime));
+          } else {
+            alert(res.message);
+          }
+        });
+      }
+      function loadToutiaoHot() {
+        var url = domainUrl + "/netHot/getByType?type=3";
+        getMessage(url).then(function (res) {
+          if (res.code == 200) {
+            var trHtml = "";
+            var lastTime = "";
+            for (i = 0; i < res.data.length; i++) {
+              trHtml += "<li class=\"nav-item\">";
+              trHtml += "<a href=\"" + res.data[i].linkUrl + "\" target=\"_blank\"  class=\"nav-link\">";
+              trHtml += res.data[i].hotWord + "<span class=\"float-right badge bg-info\">" + res.data[i].sortIndex + "</span>";
+              trHtml += "</a>";
+              trHtml += "</li>";
+              lastTime = res.data[i].lastModifyTime;
+            }
+            $("#toutiaoContentUl").html(trHtml);
+            $("#toutiaoDt").html(getDateTimeShow(lastTime));
+          } else {
+            alert(res.message);
+          }
+        });
+      }
+    </script>
+</body>
+
+</html>

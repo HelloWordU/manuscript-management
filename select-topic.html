@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>稿件列表</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">热文选题</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">热文选题</a></li>
+                <li class="breadcrumb-item active">稿件撰写</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-3 col-form-label">
+                <select class="form-control select2bs4" id="selectType" aria-placeholder="是否已选" data-placeholder="是否已选"
+                  style="width: 100%;">
+                  <option value=null>全部</option>
+                  <option value="true">已选</option>
+                  <option value="false">未选</option>
+                </select>
+              </div>
+              <div class="col-3 col-form-label">
+                <input type="text" class="form-control" id="title" placeholder="标题">
+              </div>
+              <div class="col-3 col-form-label">
+                <input type="text" class="form-control" id="source" placeholder="来源">
+              </div>
+              <div class="col-3 col-form-label">
+                <input type="text" class="form-control" id="industry" placeholder="行业">
+              </div>
+              <div class="col-3 col-form-label">
+                <a href="javascript:void(0)" onclick="loadData();" class="btn btn-primary btn-sm"><i
+                    class="fa fa-search"></i>查询</a>
+              </div>
+            </div>
+
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div id="jsGrid1" class="jsgrid" style="min-height: 500px ;"></div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.content -->
+    </div>
+  </div>
+
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/js/select2.full.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- jsGrid -->
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(function () {
+      $("#jsGrid1").jsGrid({
+        height: "100%",
+        width: "100%",
+        editing: false,
+        sorting: true,
+        paging: true,
+        pageSize: 20,
+        pageIndex: 1,
+        pageLoading: true,
+        data: [
+        ],
+        autoload: false,
+        controller: {
+          loadData: function (filter) {
+            var d = $.Deferred();
+            var getData = domainUrl + "/selectTopic/getList";
+            postMessage(getData, {
+              selectType: $("#selectType").val(),
+              title: $("#title").val(),
+              source: $("#source").val(),
+              industry: $("#industry").val(),
+              charCountLimit: null,
+              charCountMax: null,
+              pageIndex: filter.pageIndex,
+              pageSize: filter.pageSize
+            }).then(function (res) {
+              if (res.code == 200) {
+                var newData = {
+                  data: res.data,
+                  itemsCount: res.total
+                }
+                d.resolve(newData);
+              } else {
+                alert(res.message)
+              }
+            })
+            return d.promise();
+          },
+        },
+        onItemDeleted: function (args) {
+          var id = args.item.id;
+          var categoryUrl = domainUrl + "/manuscript/delete?id=" + id;
+          postMessage(categoryUrl, {}).then(function (res) {
+            if (res.code == 200) {
+            } else {
+              alert(res.message);
+              $("#jsGrid1").jsGrid("loadData");
+            }
+          });
+        },
+        onItemUpdated: function (args) {
+          saveCategoryHotWord(args.item);
+        },
+
+        fields: [
+          { name: "id", type: "text", width: 50 },
+          { name: "title", title: "标题", type: "text", width: 150 },
+          { name: "charCount", title: "字数", type: "number", width: 70 },
+          { name: "source", title: "来源", type: "text", width: 80 },
+          { name: "industry", title: "类型", type: "text", width: 70 },
+          {
+            itemTemplate: function (_, item) {
+              return $('<a target="_blank" href="' + item.url + '" class="btn btn-primary btn-sm">查看</a>');
+            },
+            align: "center",
+            width: 70,
+            title: "链接"
+          },
+
+          {
+            itemTemplate: function (_, item) {
+              return getDateTimeShow(item.publishTime);
+            },
+            align: "center",
+            width: 120,
+            title: "发布时间"
+          },
+          { name: "isSelected", title: "是否已选", type: "checkbox", width: 40 },
+          {
+            itemTemplate: function (_, item) {
+              if (item.isSelected == null || item.isSelected == false) {
+                return $('<a  href="javascript:void(0)" onclick="addToWrite(' + item.id + ')" class="btn btn-primary btn-sm">加入选题</a>');
+              } else {
+                return '以加入选题';
+              }
+
+            },
+            align: "center",
+            width: 70,
+            title: "操作"
+          },
+        ]
+      });
+      $("#jsGrid1").jsGrid("loadData");
+      //loadKeyWord();
+    });
+
+    function loadData() {
+      $("#jsGrid1").jsGrid("loadData");
+    }
+
+    function addToWrite(id) {
+      var url = domainUrl + "/selectTopic/addToWrite?id=" + id;
+      postMessage(url, {}).then(function (res) {
+        if (res.code == 200) {
+          alert("操作成功");
+          loadData();
+        } else {
+          alert(res.message)
+        }
+      })
+    }
+
+  </script>
+</body>
+
+</html>

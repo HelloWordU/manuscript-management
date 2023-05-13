@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard 3</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <!-- Select2 -->
+  <!--  /fonts.gstatic.com/s/sourcesanspro/v21/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7lujVj9w.woff2 net::E-->
+  <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <style>
+    .sidebar-dark-primary {
+      background-color: #3d435a;
+    }
+
+    .brand-link {
+      margin-top: 30px;
+      margin-bottom: 1px;
+      padding-bottom: 0;
+      padding-right: 20px;
+    }
+
+
+    .brand-link img {
+      width: 29px;
+      margin-right: 10px;
+    }
+
+    .sidebar-mini .main-sidebar .nav-link {
+      width: calc(208px - .5rem * 2);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .font-weight {
+      font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+      font-weight: 700;
+      font-style: normal;
+      font-size: 18px;
+      color: #FFFFFF;
+      vertical-align: sub;
+    }
+
+
+    .nav-item>.nav-link {
+      color: #00000072;
+      margin: 10px 0;
+      margin: 15px 0;
+    }
+
+    .nav-item>.nav-link img {
+      width: 14px;
+      margin-right: 10px;
+    }
+
+    .active>.nav-link {
+      border-bottom: 3px solid #108ee9;
+      /* font-weight: 600; */
+      color: #108ee9;
+    }
+
+    .card-body>.content {
+      display: flex;
+    }
+
+    .card-body>.content>.tabs {
+      display: inline-flex;
+    }
+
+    .note-editable>*:hover {
+      color: #ff9900;
+      cursor: pointer;
+    }
+
+    .note-editable>p {
+      color: #282828;
+      word-wrap: break-word;
+      word-break: normal;
+    }
+
+    .note-editable .active {
+      color: #108ee9;
+      cursor: pointer;
+    }
+
+    .select2-search--dropdown {
+      display: none;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      right: 3px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow,
+    .select2-container .select2-selection--single {
+      height: 40px;
+      padding-left: 0;
+    }
+
+    .first.select2-results__options,
+    .second.select2-results__options {
+      width: 50%;
+      border-right: 1px solid #ddd;
+    }
+
+    .form-content {
+      height: 94vh;
+      width: calc(100% - 25px);
+      overflow-y: auto;
+      background-color: rgba(249, 247, 253, 1);
+      margin-top: 15px;
+      padding: 15px 20px;
+    }
+
+    .left-card-list {
+      margin-top: 30px;
+    }
+
+    .left-card-list .card-body {
+      font-size: 14px;
+    }
+
+    .select2-selection__rendered {
+      font-size: 0.9rem;
+    }
+
+    .right-title .select2-selection--single {
+      height: 33px;
+    }
+
+    .right-title .select2-selection--single .select2-selection__rendered {
+      line-height: 22px;
+    }
+
+    .right-title .select2-selection--single .select2-selection__arrow {
+      height: 30px;
+    }
+
+    .button-group {
+      margin-bottom: 15px;
+    }
+
+    .button-group>* {
+      margin: 5px;
+
+    }
+
+    .button-group>*:first-child {
+      margin-left: 0;
+    }
+
+    .textual-comparison-wrap,
+    #originality {
+      position: fixed;
+      z-index: 1039;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #2f4f4f60;
+      display: none;
+    }
+
+    .textual-comparison {
+      margin: 10vh 10vw;
+      width: calc(100% - 20vw);
+      height: calc(100% - 20vh);
+      background-color: rgba(255, 255, 255, 1);
+      border-radius: 20px;
+      padding-left: 20px;
+      display: flex;
+
+    }
+
+    .textual-comparison>div {
+      width: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .textual-comparison>div>div {
+      overflow-y: auto;
+      height: calc(100% - 160px);
+    }
+
+    .textual-comparison>div .btn {
+      border-radius: 20px;
+      padding: 8px 40px;
+      position: absolute;
+      bottom: 15px;
+    }
+
+    .textual-comparison>div>div {
+      font-size: 14px;
+      padding-top: 25px;
+    }
+
+    .textual-comparison>div:first-child>div {
+      padding-right: 20px;
+    }
+
+    .textual-comparison>div:first-child .btn {
+      right: 30px;
+    }
+
+    .textual-comparison>div:last-child .btn {
+      left: 30px;
+    }
+
+    .textual-comparison>div:last-child {
+      background-color: rgb(245 244 246);
+      padding-left: 20px;
+      border-radius: 0 20px 20px 0;
+
+    }
+
+    .textual-comparison>div:last-child .tag {
+      position: absolute;
+      top: 0;
+      right: 50px;
+      background-color: #e0e8fc;
+      padding: 10px 20px;
+      text-align: center;
+      border-radius: 0 0 20px 20px;
+      color: #108ee9;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .textual-comparison>div h4 {
+      margin-top: 50px;
+    }
+
+    .message-box {
+      position: fixed;
+      top: 50vh;
+      left: 50vw;
+      width: 200px;
+    }
+
+    .fanWen {
+      display: none;
+    }
+
+    .fanWen .col-4 {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<!--
+`body` tag options:
+
+  Apply one or more of the following classes to to the body tag
+  to get the desired effect
+
+  * sidebar-collapse
+  * sidebar-mini
+-->
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light"
+      style='height:66px;box-shadow:0px 5px 5px rgba(0, 0, 0, 0.0588235294117647);margin-left: 200px;'>
+      <!-- Left navbar links -->
+      <!-- <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+    </li>
+    <li class="nav-item d-none d-sm-inline-block">
+      <a href="index3.html" class="nav-link">Home</a>
+    </li>
+    <li class="nav-item d-none d-sm-inline-block">
+      <a href="#" class="nav-link">Contact</a>
+    </li>
+  </ul> -->
+
+      <!-- Right navbar links -->
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div></div>
+        <div class="content-header" style='padding: 15px 20px;padding-bottom:5px'>
+          <div class="container-fluid" style='background-color:#fff;margin:8px 0px 15px;
+            height:56px;line-height:56px;font-size:18px; border-radius: 5px;
+            '>
+            <div class="row mb-2">
+              <div class="col-sm-6" style='padding-left:45px'>
+                <span class="m-0"> 范文列表 &nbsp;/ <span style='font-weight:600'>&nbsp;&nbsp;&nbsp;智能改稿</span> </span>
+              </div><!-- /.col -->
+
+            </div><!-- /.row -->
+          </div><!-- /.container-fluid -->
+        </div>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12" style="padding:0 20px;">
+              <div class="card">
+                <!-- <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">Online Store Visitors</h3>
+                  <a href="javascript:void(0);">View Report</a>
+                </div>
+              </div> -->
+                <div class="card-body" style="    padding: 1rem 2.25rem;">
+                  <div class='content'>
+                    <div style="width: 435px">
+                      <ul class="nav nav-underline tabs"
+                        style='min-width:410px;justify-content: space-between; height: 59px; margin-right: 25px;    border-bottom: 1px solid #eee;'>
+                        <li class="nav-item active" name="sentence">
+                          <a class="nav-link " aria-current="page" href="#">
+                            句库
+                          </a>
+                        </li>
+                        <li class="nav-item" name="gallery">
+                          <a class="nav-link" href="#">图库</a>
+                        </li>
+                        <li class="nav-item" name="enterprise">
+                          <a class="nav-link" href="#">企业图库</a>
+                        </li>
+                        <li class="nav-item" name="data">
+                          <a class="nav-link ">资料</a>
+                        </li>
+                      </ul>
+                      <div class="form-group form-content sentence">
+                        <div class="select2-purple">
+                          <select class="select2 two" label="1" data-dropdown-css-class="select2-purple"
+                            style="width: 100%;">
+                            <option>全部</option>
+                            <option>配置</option>
+                            <option>内存</option>
+                            <option>性能</option>
+                            <option>外观</option>
+
+                          </select>
+
+                        </div>
+                        <div class="select2-purple" style="      margin-top: 20px;
+">
+                          <select class="select2" id="radio" name="icon" data-dropdown-css-class="select2-purple"
+                            style="width: 100%;">
+                            <option>全部</option>
+                            <option>华为Pocket S折叠机</option>
+                            <option>华为Mate 50 pro</option>
+                            <option>华为Mate 50</option>
+                            <option>华为畅享</option>
+
+                          </select>
+
+                        </div>
+                        <div class="left-card-list">
+                          <div class="card">
+                            <!--                          js 动态填充-->
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="form-group form-content gallery">
+                        <div class="select2-purple" style="">
+                          <select class="select2" name="icon" data-dropdown-css-class="select2-purple"
+                            style="width: 100%;">
+                            <option>全部</option>
+                            <option>华为Pocket S折叠机</option>
+                            <option>华为Mate 50 pro</option>
+                            <option>华为Mate 50</option>
+                            <option>华为畅享</option>
+
+                          </select>
+                        </div>
+                        <div class="row fanWen" style="padding:10px 10px 0">
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1676.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1678.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1680.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1682.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1684.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1686.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1688.png"></div>
+                        </div>
+                      </div>
+                      <div class="form-group form-content enterprise">
+                        <div class="select2-purple" style="">
+                          <select class="select2" name="icon" data-dropdown-css-class="select2-purple"
+                            style="width: 100%;">
+                            <option>全部</option>
+                            <option>华为Pocket S折叠机</option>
+                            <option>华为Mate 50 pro</option>
+                            <option>华为Mate 50</option>
+                            <option>华为畅享</option>
+
+                          </select>
+                        </div>
+                        <div class="row fanWen" style="padding:10px 10px 0">
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1676.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1678.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1680.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1682.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1684.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1686.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1688.png"></div>
+                        </div>
+                      </div>
+                      <div class="form-group form-content data">
+                        <div class="select2-purple" style="">
+                          <select class="select2" name="icon" data-dropdown-css-class="select2-purple"
+                            style="width: 100%;">
+                            <option>全部</option>
+                            <option>华为Pocket S折叠机</option>
+                            <option>华为Mate 50 pro</option>
+                            <option>华为Mate 50</option>
+                            <option>华为畅享</option>
+
+                          </select>
+                        </div>
+                        <div class="row fanWen" style="padding:10px 10px 0">
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1676.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1678.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1680.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1682.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1684.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1686.png"></div>
+                          <div class="col-4"><img src="dist/img/fanWen/gallery/u1688.png"></div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div>
+                      <div class="right-title">
+                        <div class="select2-purple" style="display: inline-block;vertical-align: top;">
+                          <select class="select2" data-dropdown-css-class="select2-purple" style="width: 120px">
+                            <option value="normal">普通稿件</option>
+                            <option value="special">变形稿件</option>
+                          </select>
+
+                        </div>
+                        <span class="font-weight-bolder"
+                          style="line-height: 33px;display: inline-block;font-size: 24px;margin-left: 10px">
+                          华为Pocket S折叠机-导购模板_2323</span>
+                        <button type="button" class="btn btn-primary" id="intelligent" style="
+                      float: right;">智能推荐
+                        </button>
+                      </div>
+                      <div style="line-height: 40px;font-size: 14px;color: #108ee9">
+                        <span class="word-count"
+                          style="margin-right: 50px;min-width: 100px;display: inline-block;color: #000000A5">
+                          字数统计：0 字</span>
+                        <span>图片重复率：8%</span>
+                      </div>
+                      <div class="button-group">
+                        <button type="button" class="btn btn-outline-primary">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path
+                              d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd"
+                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                          </svg>
+                          原文对比
+                        </button>
+                        <button type="button" class="btn btn-outline-primary"><i class="fas fa-save"></i>
+                          近义词替换
+                        </button>
+                        <button type="button" class="btn btn-outline-primary">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-send-fill" viewBox="0 0 16 16">
+                            <path
+                              d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z" />
+                          </svg>
+                          原创度检测
+                        </button>
+                        <button type="button" class="btn btn-outline-primary">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path
+                              d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd"
+                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                          </svg>
+                          智能改写
+                        </button>
+                        <button type="button" class="btn btn-outline-primary"><i class="fas fa-save"></i> 保存稿件
+                        </button>
+
+                      </div>
+                      <textarea id="summernote">
+                    </textarea>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="control-sidebar control-sidebar-dark">
+    </aside>
+    <div class="textual-comparison-wrap">
+
+      <div class="textual-comparison">
+        <div>
+          <button type="button" class="btn btn-outline-secondary">取消</button>
+          <h4>改写前</h4>
+          <div>
+            11月2日华为全场景新品发布会上不仅带来了众多科技新品，同时还发布了全新纵向折叠屏手机——华为Pocket
+            S。在设计上延续经典，纵向折叠设计小巧精致，色彩的运用也更加出众。
+            <br />
+            <br />
+            凭借创新科技和精致工艺，华为Pocket S呈现完美无缝和极致纤薄的形态，配合精致优雅的设计，一开一合间收放自如，带来满满仪式感。华为Pocket
+            S一镜一相设计由全新摄像头模组和智慧外屏组成，为时尚年轻用户提供全新拍摄方式与品味格调的双重满足。
+            <br />
+            <br />
+            华为Pocket S给用户带来了6款潮流配色，分别是樱草金、薄荷绿、樱语粉、冰晶蓝、曜石黑、冰霜银。就算是再挑剔的用户，也会被其中一种色调所吸引目光。华为Pocket
+            S在色彩上不断创新突破从自然世界汲取灵感，并融合高级时尚气息。华为Pocket
+            S根据不同颜色的格调，精心搭配不同质感的玻璃面板，冰霜银使用的磨砂玻璃，手感细腻且不显指纹。另外5款配色巧妙地把色彩灵感赋予在超薄玻璃上，亮面玻璃搭配多彩光学镀膜工艺，形成彩色陶瓷质感，色泽更加通透雅致，在不同的光线下，营造出空间感和立体感。
+            <br />
+            <br />
+            华为Pocket S只要轻轻一开，立即拥有一块6.9英寸沉浸大屏，21：9出色观影比例，带来
+            “剧场式”的沉浸体验。配合442ppi、10.7亿色和P3广色域色彩管理，更真实还原色彩，显示更细腻。屏幕支持120Hz刷新率和300Hz触控采样率，显示流畅、触控精准；1440Hz
+            高频PWM调光，暗光环境更护眼。华为Pocket S还支持HDR Vivid视频显示，色彩及层次更丰富，明暗对比更强，为用户带来真实的临场感。同时还采用了防反光纳米光学膜，阳光下也清晰。
+            <br />
+            <br />
+            在续航能力上，华为经过不断的探索，已经成功克服了折叠屏手机的散热瓶颈，华为Pocket
+            S运用业界首创超冷柔性石墨烯散热系统，为用户提供极其流畅的使用体验。在轻薄的机身中配备4000mAh电池，支持40W华为超级快充，并升级支持Turbo充电模式。与此同时在Turbo模式下，20分钟就能够充电52%，结合软硬件协同优化，整体续航进一步升级，提供超长时间的拍摄、通话、影音娱乐精彩体验。
+            <br />
+            <br />
+            华为Pocket S
+            128GB售价5988元；256GB售价6488元；将于2022年11月2日21:08在华为商城、各大授权电商、华为体验店、授权零售商开启预售，2022年11月10日10:08正式开售。华为Pocket
+            S 512GB售价7488元，将于2022年12月正式开售。
+          </div>
+        </div>
+        <div>
+          <h4>改写后</h4>
+          <div>
+            11月2日华为全场景新品发布会上不仅带来了众多科技新品，同时还发布了全新纵向折叠屏手机——华为Pocket
+            S。在设计上延续经典，纵向折叠设计小巧精致，色彩的运用也更加出众。
+            <br />
+            <br />
+            凭借创新科技和精致工艺，华为Pocket S呈现完美无缝和极致纤薄的形态，配合精致优雅的设计，一开一合间收放自如，带来满满仪式感。华为Pocket
+            S一镜一相设计由全新摄像头模组和智慧外屏组成，为时尚年轻用户提供全新拍摄方式与品味格调的双重满足。
+
+            <br />
+            <br />
+            华为Pocket S给用户带来了6款潮流配色，分别是樱草金、薄荷绿、樱语粉、冰晶蓝、曜石黑、冰霜银。就算是再挑剔的用户，也会被其中一种色调所吸引目光。华为Pocket
+            S在色彩上不断创新突破从自然世界汲取灵感，并融合高级时尚气息。华为Pocket
+            S根据不同颜色的格调，精心搭配不同质感的玻璃面板，冰霜银使用的磨砂玻璃，手感细腻且不显指纹。另外5款配色巧妙地把色彩灵感赋予在超薄玻璃上，亮面玻璃搭配多彩光学镀膜工艺，形成彩色陶瓷质感，色泽更加通透雅致，在不同的光线下，营造出空间感和立体感。
+
+            <br />
+            <br />
+            华为Pocket S只要轻轻一开，立即拥有一块6.9英寸沉浸大屏，21：9出色观影比例，带来
+            “剧场式”的沉浸体验。配合442ppi、10.7亿色和P3广色域色彩管理，更真实还原色彩，显示更细腻。屏幕支持120Hz刷新率和300Hz触控采样率，显示流畅、触控精准；1440Hz
+            高频PWM调光，暗光环境更护眼。华为Pocket S还支持HDR Vivid视频显示，色彩及层次更丰富，明暗对比更强，为用户带来真实的临场感。同时还采用了防反光纳米光学膜，阳光下也清晰。
+
+            <br />
+            <br />
+            在续航能力上，华为经过不断的探索，已经成功克服了折叠屏手机的散热瓶颈，华为Pocket
+            S运用业界首创超冷柔性石墨烯散热系统，为用户提供极其流畅的使用体验。在轻薄的机身中配备4000mAh电池，支持40W华为超级快充，并升级支持Turbo充电模式。与此同时在Turbo模式下，20分钟就能够充电52%，结合软硬件协同优化，整体续航进一步升级，提供超长时间的拍摄、通话、影音娱乐精彩体验。
+
+
+            <br />
+            <br /> 华为Pocket S
+            128GB售价5988元；256GB售价6488元；将于2022年11月2日21:08在华为商城、各大授权电商、华为体验店、授权零售商开启预售，2022年11月10日10:08正式开售。华为Pocket
+            S 512GB售价7488元，将于2022年12月正式开售。
+
+          </div>
+          <button type="button" class="btn btn-primary">确定</button>
+          <span class="tag">
+            <div>原创度</div>
+            <div>94%</div>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="message-box save-success" style="display: none;z-index: 3333">
+      <div class="alert alert-success" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+          <path
+            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </svg>
+        <span style="margin-left: 15px">保存成功!</span>
+      </div>
+    </div>
+    <div class="message-box originality-message" style="display: none;z-index: 3333;width: 450px">
+      <div class="alert alert-success" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+          <path
+            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </svg>
+        <span style="margin-left: 15px">原创度检测已提交，请在稿件列表中查看检测结果！</span>
+      </div>
+    </div>
+    <div id="originality" style="display:none;">
+      <div class="originality-content" style="position:fixed;top: 10vh ;height:calc(100% - 30vh);left: 20vw;right: 40vw;
+         background-color: #fff;width: 60%;border-radius: 20px;padding-bottom:20px;">
+        <div
+          style="display: flex;justify-content: space-between;font-size: 20px;color: #666;border-bottom: 1px solid #ccc;padding: 20px">
+          <div>原创度检测</div>
+          <div style="margin-right: 15px;font-size: 20px;cursor: pointer" class="close">X</div>
+        </div>
+        <div style="padding:40px 20px 20px;font-size:14px;overflow-y: auto;height: calc(100% - 120px)">
+          11月2日华为全场景新品发布会上不仅带来了众多科技新品，同时还发布了全新纵向折叠屏手机——华为Pocket
+          S。在设计上延续经典，纵向折叠设计小巧精致，色彩的运用也更加出众。
+          <br />
+          <br />
+          凭借创新科技和精致工艺，华为Pocket S呈现完美无缝和极致纤薄的形态，配合精致优雅的设计，一开一合间收放自如，带来满满仪式感。华为Pocket
+          S一镜一相设计由全新摄像头模组和智慧外屏组成，为时尚年轻用户提供全新拍摄方式与品味格调的双重满足。
+          <br />
+          <br />
+          华为Pocket S给用户带来了6款潮流配色，分别是樱草金、薄荷绿、樱语粉、冰晶蓝、曜石黑、冰霜银。就算是再挑剔的用户，也会被其中一种色调所吸引目光。华为Pocket
+          S在色彩上不断创新突破从自然世界汲取灵感，并融合高级时尚气息。华为Pocket
+          S根据不同颜色的格调，精心搭配不同质感的玻璃面板，冰霜银使用的磨砂玻璃，手感细腻且不显指纹。另外5款配色巧妙地把色彩灵感赋予在超薄玻璃上，亮面玻璃搭配多彩光学镀膜工艺，形成彩色陶瓷质感，色泽更加通透雅致，在不同的光线下，营造出空间感和立体感。
+          <br />
+          <br />
+          华为Pocket S只要轻轻一开，立即拥有一块6.9英寸沉浸大屏，21：9出色观影比例，带来
+          “剧场式”的沉浸体验。配合442ppi、10.7亿色和P3广色域色彩管理，更真实还原色彩，显示更细腻。屏幕支持120Hz刷新率和300Hz触控采样率，显示流畅、触控精准；1440Hz
+          高频PWM调光，暗光环境更护眼。华为Pocket S还支持HDR Vivid视频显示，色彩及层次更丰富，明暗对比更强，为用户带来真实的临场感。同时还采用了防反光纳米光学膜，阳光下也清晰。
+          <br />
+          <br />
+          在续航能力上，华为经过不断的探索，已经成功克服了折叠屏手机的散热瓶颈，华为Pocket
+          S运用业界首创超冷柔性石墨烯散热系统，为用户提供极其流畅的使用体验。在轻薄的机身中配备4000mAh电池，支持40W华为超级快充，并升级支持Turbo充电模式。与此同时在Turbo模式下，20分钟就能够充电52%，结合软硬件协同优化，整体续航进一步升级，提供超长时间的拍摄、通话、影音娱乐精彩体验。
+          <br />
+          <br />
+          华为Pocket S
+          128GB售价5988元；256GB售价6488元；将于2022年11月2日21:08在华为商城、各大授权电商、华为体验店、授权零售商开启预售，2022年11月10日10:08正式开售。华为Pocket
+          S 512GB售价7488元，将于2022年12月正式开售。
+
+        </div>
+
+        <div style="    padding-top: 10px;
+    text-align: right;">
+
+          <button type="button" class="btn btn-primary" style="
+    border-radius: 40px;padding: 10px 40px;margin-right: 30px;">
+            确定
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/js/select2.full.min.js"></script>
+  <!-- Summernote -->
+  <script src="../../plugins/summernote/summernote-bs4.min.js"></script>
+  <script src="plugins/summernote/lang/summernote-zh-CN.js"></script>
+
+  <script>
+    var summernote = null
+    var testT = `11月2日华为全场景新品发布会上不仅带来了众多科技新品，同时还发布了全新纵向折叠屏手机——华为Pocket S。在设计上延续经典，纵向折叠设计小巧精致，色彩的运用也更加出众。
+
+凭借创新科技和精致工艺，华为Pocket S呈现完美无缝和极致纤薄的形态，配合精致优雅的设计，一开一合间收放自如，带来满满仪式感。华为Pocket S一镜一相设计由全新摄像头模组和智慧外屏组成，为时尚年轻用户提供全新拍摄方式与品味格调的双重满足。
+
+华为Pocket S给用户带来了6款潮流配色，分别是樱草金、薄荷绿、樱语粉、冰晶蓝、曜石黑、冰霜银。就算是再挑剔的用户，也会被其中一种色调所吸引目光。华为Pocket S在色彩上不断创新突破从自然世界汲取灵感，并融合高级时尚气息。华为Pocket S根据不同颜色的格调，精心搭配不同质感的玻璃面板，冰霜银使用的磨砂玻璃，手感细腻且不显指纹。另外5款配色巧妙地把色彩灵感赋予在超薄玻璃上，亮面玻璃搭配多彩光学镀膜工艺，形成彩色陶瓷质感，色泽更加通透雅致，在不同的光线下，营造出空间感和立体感。
+
+华为Pocket S只要轻轻一开，立即拥有一块6.9英寸沉浸大屏，21：9出色观影比例，带来 “剧场式”的沉浸体验。配合442ppi、10.7亿色和P3广色域色彩管理，更真实还原色彩，显示更细腻。屏幕支持120Hz刷新率和300Hz触控采样率，显示流畅、触控精准；1440Hz 高频PWM调光，暗光环境更护眼。华为Pocket S还支持HDR Vivid视频显示，色彩及层次更丰富，明暗对比更强，为用户带来真实的临场感。同时还采用了防反光纳米光学膜，阳光下也清晰。
+
+在续航能力上，华为经过不断的探索，已经成功克服了折叠屏手机的散热瓶颈，华为Pocket S运用业界首创超冷柔性石墨烯散热系统，为用户提供极其流畅的使用体验。在轻薄的机身中配备4000mAh电池，支持40W华为超级快充，并升级支持Turbo充电模式。与此同时在Turbo模式下，20分钟就能够充电52%，结合软硬件协同优化，整体续航进一步升级，提供超长时间的拍摄、通话、影音娱乐精彩体验。
+
+华为Pocket S 128GB售价5988元；256GB售价6488元；将于2022年11月2日21:08在华为商城、各大授权电商、华为体验店、授权零售商开启预售，2022年11月10日10:08正式开售。华为Pocket S 512GB售价7488元，将于2022年12月正式开售。`
+    var noteEditable
+    const options = {
+      '全部': `
+<li class="select2-results__option select2-results__option--highlighted" id="select2-6xnl-result-vy3y-全部" role="option" aria-selected="true" data-select2-id="select2-6xnl-result-vy3y-全部">全部</li>
+<li class="select2-results__option" id="select2-6xnl-result-iars-配置" role="option" aria-selected="false" data-select2-id="select2-6xnl-result-iars-配置">摄像头</li>
+<li class="select2-results__option" id="select2-6xnl-result-0q1e-内存" role="option" aria-selected="false" data-select2-id="select2-6xnl-result-0q1e-内存">折叠屏</li>
+<li class="select2-results__option" id="select2-6xnl-result-hhbs-性能" role="option" aria-selected="false" data-select2-id="select2-6xnl-result-hhbs-性能">外壳</li>
+<li class="select2-results__option" id="select2-6xnl-result-7v82-外观" role="option" aria-selected="false" data-select2-id="select2-6xnl-result-7v82-外观">屏幕</li>
+`,
+      '配置': `
+<li class="select2-results__option select2-results__option--highlighted" id="select2-6xnl-result-vy3y-全部" role="option" aria-selected="true" data-select2-id="select2-6xnl-result-vy3y-全部">1</li>
+<li class="select2-results__option" id="select2-6xnl-result-iars-配置" role="option" aria-selected="false" data-select2-id="select2-6xnl-result-iars-配置">2</li>
+<li class="select2-results__option" id="select2-6xnl-result-0q1e-内存" role="option" aria-selected="false" data-select2-id="select2-6xnl-result-0q1e-内存">3</li>
+<li class="select2-results__option" id="select2-6xnl-result-hhbs-性能" role="option" aria-selected="false" data-select2-id="select2-6xnl-result-hhbs-性能">4</li>
+<li class="select2-results__option" id="select2-6xnl-result-7v82-外观" role="option" aria-selected="false" data-select2-id="select2-6xnl-result-7v82-外观">5</li>
+`
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // 初始话 富文本编辑器
+    function initSummernote() {
+      summernote = $('#summernote')
+      summernote.summernote({
+        height: 700,
+        focus: true,
+        lang: 'zh-CN',
+
+        fontNames: [
+          '黑体',
+          '宋体',
+          '新宋体',
+          '仿宋',
+          '楷体',
+          '仿宋GB2312',
+          '楷体GB2312',
+          '微软雅黑',
+          '冬青黑体',
+          '华文细黑',
+          '华文黑体',
+          '华文楷体',
+          '华文仿宋',
+          '隶书',
+          '幼圆',
+          '华文宋体',
+          '华文中宋',
+          '方正舒体',
+          '方正姚体',
+          '华文彩云',
+          '华文琥珀',
+          '华文隶书',
+          '华文行楷',
+          '华文新魏',
+        ],
+        toolbar: [
+          ['style', ['bold', 'italic', 'underline', 'clear', 'style']],
+          ['fontsize',
+            ['fontsize',
+              'fontsizeunit']
+          ],
+          ['color',
+            ['color',
+              'forecolor',
+              'backcolor']
+          ],
+          ['font',
+            ['fontname',
+              'strikethrough',
+              'superscript',
+              'subscript',
+              'clear']
+          ],
+
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['height', ['height']],
+          ['insert', ['picture', 'link', 'video', 'table', 'hr']],
+          ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
+        ],
+        callbacks: {
+          onChange: function (contents, $editable) {
+            noteEditable = $('.note-editable p')
+            noteEditable.click(function () {
+              console.log('文字被点击')
+              $(this).addClass('active').siblings().removeClass('active')
+            })
+            noteEditable.removeClass('active') //清除 click 样式
+            // var innerText = summernote.summernote('codeview.toggle')
+            console.log($('.note-editable').text())
+            $('.word-count').text(`字数统计：${$('.note-editable').text().length} 字 `)
+            console.log('onChange:')
+          },
+          onPaste: function (e) {
+            console.log('Called event paste')
+          }
+        }
+      })
+    }
+
+    const txtArr = [
+      `1、这部折叠屏手机被命名为华为Pocket
+        S。显然继承了Pocket之名作为产品名的主体并加以字母“S”后缀用以区隔，意味着它将会是一个全新的产品系列，也将带来全新的定位与功能，从预热视频中的“多彩”元素可见，华为Pocket
+        S将是一部面向年轻人同时拥有丰富的配色可选的折叠屏手机。`,
+      `2、作为一款高成本的新品，华为Pocket S在技术创新方面一定会给消费者带来眼前一亮的惊喜，比如，铰链是折叠屏手机的核心配件之一，它关系到手机的厚度、重量和屏幕折痕。`,
+      `3、对此，猜测华为Pocket S大概率会搭载全新的铰链，以达到消除屏幕折痕和降低整机厚度的效果。此外，华为Pocket S还极有可能采用全新的定制材料，来实现减轻整机重量的目的，致力打造一部轻薄无折痕的折叠屏手机。`,
+      `4、参考华为P50 Pocket的内外屏交互，可以预见华为Pocket S在鸿蒙系统3.0的加持下，将带来更为有趣的内外屏交互，如外屏充当自拍监视器，又如常态显示健康码，或是成为手机快捷菜单等等。总之，相信华为Pocket S的内外屏交互设计，非常值得期待。折叠屏手机作为比较有想象空间的新产品形态，带来全新的革命性体验，让我们一起持续关注吧。`,
+      `5、猜测华为Pocket S大概率会搭载全新的铰链，以达到消除屏幕折痕和降低整机厚度的效果。此外，华为Pocket S还极有可能采用全新的定制材料，来实现减轻整机重量的目的。`
+    ]
+
+    function insertCard(txt) {
+      return `
+  <div class="card">
+      <div class="card-body">
+        <p>
+          ${txt}
+        </p>
+        <div style="text-align: right">
+          <a href="#" style="margin-right: 10px">插入</a>
+          <a href="#">替换</a>
+        </div>
+      </div>
+  </div>`
+    }
+
+    $(function () {
+      // Summernote
+      initSummernote()
+      const $select2 = $('.select2').select2()
+      // $('.select2-selection__rendered').eq(0).text('全部 / 全部')
+      $('.select2-selection__rendered').eq(0).html(`<img src="dist/img/fanWen/u798.png" style='height:22px;margin-right: 10px;'/><span>全部 / 全部</span>`)
+      $('.select2-selection__rendered').eq(1).html(`<img src="dist/img/fanWen/u825.png" style='height:15px;margin-right: 10px;'/><span>全部</span>`)
+      $('.form-group .fanWen').siblings().find('.select2-selection__rendered').html(`<svg xmlns="http://www.w3.org/2000/svg" width="16" style="margin-right: 10px;color:#999" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+</svg>
+<span>全部</span>`)
+      $('.select2').on('click', function () {
+        if ($(this).siblings().hasClass('two')) {
+          let resultsHtml = $('.select2-results').html()
+          $('.select2-results').css('display', 'flex')
+          if ($('.select2-results').children().length === 1) {
+            $('.select2-results').html(resultsHtml.replace('select2-results__options', 'select2-results__options first')
+              + resultsHtml.replace('select2-results__options', 'select2-results__options second'))
+          }
+
+          $('.second').children().on('mouseover', function () {
+            $(this).addClass('select2-results__option--highlighted').siblings().removeClass('select2-results__option--highlighted')
+          })
+          $('.select2-results__option').click(function () {
+            $(this).attr('aria-selected', 'true').siblings().attr('aria-selected', 'false')
+            $('.select2-selection__rendered span').eq(0).text($('.first .select2-results__option--highlighted').text() + ' / ' +
+              $('.second .select2-results__option[aria-selected="true"]').text())
+          })
+          $('.first').children().on('mouseover', function () {
+            if (!$(this).hasClass('select2-results__option--highlighted')) {
+              $('.second').html(options[$(this).text()] ? options[$(this).text()] : options['全部'])
+            }
+
+            $(this).addClass('select2-results__option--highlighted').siblings().removeClass('select2-results__option--highlighted')
+
+            $('.second').children().on('mouseover', function () {
+              $(this).addClass('select2-results__option--highlighted').siblings().removeClass('select2-results__option--highlighted')
+            })
+            $('.select2-results__option').click(function () {
+              $(this).attr('aria-selected', 'true').siblings().attr('aria-selected', 'false')
+              $('.select2-selection__rendered span').eq(0).text($('.first .select2-results__option--highlighted').text() + ' / ' +
+                $('.second .select2-results__option[aria-selected="true"]').text())
+
+            })
+          })
+        }
+      })
+      $('#radio').on('select2:select', function (e) {
+        $('.select2-selection__rendered').eq(1).html(`<img src="dist/img/fanWen/u825.png" style='height:15px;margin-right: 10px;'/><span>${e.params.data.text}</span>`)
+      })
+
+      $('.select2[name="icon"]').on('select2:select', function (e) {
+        $(this).parents('.form-group').find('.select2-selection__rendered').html(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" style="margin-right: 10px;color:#999" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+        </svg>
+        <span>${e.params.data.text}</span>
+        `)
+        $(this).parents('.form-group').find('.fanWen').css({ display: 'flex' })
+        $(this).parents('.form-group').siblings().find('.fanWen').css({ display: 'none' })
+      })
+
+      $('.tabs .nav-item').click(function () {
+        $(this).addClass('active').siblings().removeClass('active')
+        $('.form-group').css({ display: 'none' })
+        $(`.${$(this).attr('name')}`).css({ display: 'block' })
+
+      })
+      $('.left-card-list').html(txtArr.map(t => insertCard(t)).join(''))
+      $('.left-card-list .card-body div a').click(function () {
+        alert($(this).parent().siblings().text() + '\n' + $(this).text())
+      })
+      $('#intelligent').click(function () {
+        $(this).siblings('.font-weight-bolder').text('华为Pocket S正式发布！年轻时尚消费者优选小折叠')
+        alert('智能推荐')
+      })
+
+      $('.textual-comparison button').click(function () {
+        alert($(this).text())
+        $('.textual-comparison-wrap').css('display', 'none')
+      })
+      $('.button-group').children().click(function () {
+        if ($(this).text().includes('原文对比') || $(this).text().includes('智能改写')) {
+          $('.textual-comparison-wrap').css('display', 'block')
+        } else if ($(this).text().includes('近义词替换') || $(this).text().includes('保存稿件')) {
+          $('.save-success').css('display', 'block')
+          setTimeout(function () {
+            $('.save-success').css('display', 'none')
+          }, 600)
+        } else {
+          $('#originality').css('display', 'block')
+
+          $('.close').click(function () {
+            $('#originality').css('display', 'none')
+          })
+          $('.originality-content button').click(function () {
+            $('.originality-message').css({ display: 'block' })
+            setTimeout(function () {
+              $('.originality-message').css('display', 'none')
+              $('#originality').css('display', 'none')
+            }, 600)
+          })
+        }
+      })
+      $('.form-content').height($('.note-editor').height() + 20);
+
+      $('#summernote').summernote('code','<div class="_2Zphx "><div class="_3ygOc lg-fl "><p></p><!--29--><!--30--><!--31--><!--32--><!--33--><!--34--><!--35--><!--36--><!--37--><p>用过高性价比手机的消费者，基本上都知道小米，因为小米可以说是高性价比手机的开创者了，正是在小米的带领下，市面上才出现了物美价廉的高性价比机型，但真正喜欢高性价比手机的消费者，所知道的高性价比手机品牌就不止小米了，例如目前realme这一品牌就和小米在高性价比手机领域竞争的非常激烈，它旗下机型性价比完全不输小米。</p><p></p></div><div class="_213jB lg-fl "><!--38--><!--39--><div class="JmmC0"><img src="https://pics7.baidu.com/feed/caef76094b36acafb9925b9eb94faf1c00e99c81.jpeg@f_auto?token=9b1e4dda71876f6e16250d16c3fbdd33" width="640" class="_1mscr"><!--42--></div><!--40--><!--43--><!--44--><!--45--><!--46--><!--47--><!--48--></div><div class="_3ygOc lg-fl "><p></p><!--49--><!--50--><!--51--><!--52--><!--53--><!--54--><!--55--><!--56--><!--57--><p>realme这一品牌背后有OPPO的扶持，主要目的就是想要抢占小米的份额，尤其是小米极致性价比子品牌redmi的份额，可能大家也发现了，两个品牌的命名也都有点相像，至于realme这一品牌旗下机型同样做到了极致性价比，而且这一品牌的存在对于消费者而言也是一件好事，因为它旗下机型可以覆盖到小米未注意的领域，例如realme 10 Pro+。</p><p></p></div><div class="_213jB lg-fl "><!--58--><!--59--><div class="JmmC0"><img src="https://pics0.baidu.com/feed/7c1ed21b0ef41bd57c64c0ae944ca3c738db3dd3.jpeg@f_auto?token=33d90ac08c8df1111e0780276f752671" width="640" class="_1mscr"><!--62--></div><!--60--><!--63--><!--64--><!--65--><!--66--><!--67--><!--68--></div><div class="_3ygOc lg-fl "><p></p><!--69--><!--70--><!--71--><!--72--><!--73--><!--74--><!--75--><!--76--><!--77--><p>realme 10 Pro+这款手机十分特殊，它不仅性价比高，而且还是难得的低价曲面屏手机，虽然小米子品牌redmi旗下机型性价比很高，但小米公司为了避免子品牌对主品牌造成冲击，所以强制redmi手机均只能启用直屏设计，这对于预算不多但喜欢曲面屏手机的消费者而言就不太好友了，但好在还有realme 10 Pro+，它就完全符合这类消费者的需求，因此卖得很好。</p><p></p></div><div class="_213jB lg-fl "><!--78--><!--79--><div class="JmmC0"><img src="https://pics3.baidu.com/feed/34fae6cd7b899e5174c98cdb8731fb3fca950dd8.jpeg@f_auto?token=2cf7358aba258ce2df992bfcfe312651" width="640" class="_1mscr"><!--82--></div><!--80--><!--83--><!--84--><!--85--><!--86--><!--87--><!--88--></div><div class="_3ygOc lg-fl "><p></p><!--89--><!--90--><!--91--><!--92--><!--93--><!--94--><!--95--><!--96--><!--97--><p>曲面屏之前一直都是高端旗舰的标配，但这款定价1699元起的手机却也配备了曲面屏，并且所配备的曲面屏档次还不低，120Hz高刷新率和10.7亿色原彩显示应有尽有，甚至这还是一块顶级护眼屏，支持了2160Hz高频PWM调光，并通过了无频闪低蓝光莱茵双认证，而且这款手机还不止屏幕好，它的处理器、电池以及摄像头用料都很实在。</p><p></p></div><div class="_213jB lg-fl "><!--98--><!--99--><div class="JmmC0"><img src="https://pics2.baidu.com/feed/cc11728b4710b91224513041046bde0f93452224.jpeg@f_auto?token=3e3c057d29b8458021940f56a0fb4231" width="640" class="_1mscr"><!--102--></div><!--100--><!--103--><!--104--><!--105--><!--106--><!--107--><!--108--></div><div class="_3ygOc lg-fl "><p></p><!--109--><!--110--><!--111--><!--112--><!--113--><!--114--><!--115--><!--116--><!--117--><p>作为一款1699元的低档机型，它搭载的是天玑1080这颗优质中低档处理器，即使是玩游戏也不用担心性能不够，至于它的电池容量则高达5000mAh，并且搭配上67W闪充，充满电的时间也很快，而它的后置摄像头启用的是一亿像素三摄，拍照表现也比同价位手机更为出色，包括X轴线性马达、立体声双扬声器和屏幕指纹它也全部都有。</p><p></p></div><div class="_213jB lg-fl "><!--118--><!--119--><div class="JmmC0"><img src="https://pics6.baidu.com/feed/a044ad345982b2b7864b3d64f73be9e374099bd8.jpeg@f_auto?token=0e842b8c11388937a5cf34a88b16462e" width="640" class="_1mscr"><!--122--></div><!--120--><!--123--><!--124--><!--125--><!--126--><!--127--><!--128--></div><div class="_3ygOc lg-fl "><p><span class="bjh-p">这样一款手机放到现在来看也依然竞争力十足，但之所以说realme是小米的强敌，是因为它仍然舍得将高性价比手机降价来追求更高的销量，如今在realme官方品牌专卖店中，这款手机的标配版价格已经是被限时下调到了1349元沦为千元机了，千元机就能用上高端曲面屏和一亿像素三摄，放在以前真的是想都不敢想，由此可见这一品牌机型性价比究竟有多高。<span class="bjh-a" data-bjh-src="https://m.baidu.com/s?word=%23%E6%95%B0%E7%A0%81%E5%AE%B6%E5%B1%85%E5%A5%BD%E7%89%A9%E5%A4%A7%E8%B5%8F%23&amp;topic_id=168267941016967307&amp;sa=edit&amp;sfrom=1023524a&amp;append=1&amp;newwindow=0&amp;upqrade=1" data-bjh-type="topic" data-bjh-id="168267941016967307" data-bjh-cover="https://b0.bdstatic.com/topic/server/1/31fb94bc18e5.jpg">#数码家居好物大赏#</span></span></p><!--129--><!--130--><!--131--><!--132--><!--133--><!--134--><!--135--><!--136--><!--137--></div><!--28--><!--138--><!--139--><div class="_213jB"><div class="_1LjGN"><span>举报/反馈</span></div></div></div>');
+
+    })
+  </script>
+
+</body>
+
+</html>

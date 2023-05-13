@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <script src="https://kit.fontawesome.com/1bfd4b8706.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="hold-transition login-page">
@@ -148,16 +149,15 @@
         }),
         success: function (result) {//返回数据根据结果进行相应的处理  
           if (result.code == 200) {
-            if($("#loginType").val()==2)
-            {
-               setCookie("accessToken", result.data);
-               location.href = "/index-s.html"; 
-            }else if($("#loginType").val()==3){
+            if ($("#loginType").val() == 2) {
               setCookie("accessToken", result.data);
-              location.href = "/index-c.html"; 
-            }else{
-               setCookie("accessToken", result.data);
-               location.href = "/index.html"; 
+              location.href = "/index-s.html";
+            } else if ($("#loginType").val() == 3) {
+              setCookie("accessToken", result.data);
+              location.href = "/index-c.html";
+            } else {
+              setCookie("accessToken", result.data);
+              location.href = "/index.html";
             }
 
           } else {
