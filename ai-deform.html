@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>稿件变形</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="plugins/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <style>
+    .textual-comparison-wrap {
+      position: fixed;
+      z-index: 1039;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #2f4f4f60;
+      display: none;
+    }
+
+    .textual-comparison {
+      margin: 10vh 10vw;
+      width: calc(100% - 20vw);
+      height: calc(100% - 20vh);
+      background-color: rgba(255, 255, 255, 1);
+      border-radius: 20px;
+      padding-left: 20px;
+      display: flex;
+
+    }
+
+    .textual-comparison>div {
+      width: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .textual-comparison>div>div {
+      overflow-y: auto;
+      height: calc(100% - 160px);
+    }
+
+    .textual-comparison>div .btn {
+      border-radius: 20px;
+      padding: 8px 40px;
+      position: absolute;
+      bottom: 15px;
+    }
+
+    .textual-comparison>div>div {
+      font-size: 14px;
+      padding-top: 25px;
+    }
+
+    .textual-comparison>div:first-child>div {
+      padding-right: 20px;
+    }
+
+    .textual-comparison>div:first-child .btn {
+      right: 30px;
+    }
+
+    .textual-comparison>div:last-child .btn {
+      left: 30px;
+    }
+
+    .textual-comparison>div:last-child {
+      background-color: rgb(245 244 246);
+      padding-left: 20px;
+      border-radius: 0 20px 20px 0;
+
+    }
+
+    .textual-comparison>div:last-child .tag {
+      position: absolute;
+      top: 0;
+      right: 50px;
+      background-color: #e0e8fc;
+      padding: 10px 20px;
+      text-align: center;
+      border-radius: 0 0 20px 20px;
+      color: #108ee9;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .textual-comparison>div h4 {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">稿件变形</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">稿件变形</a></li>
+                <li class="breadcrumb-item active">智能撰写</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card card-outline card-info" id="old_div">
+              <div class="card-header">
+                <h3 class="card-title">
+                  文章变形
+                </h3>
+                <button type="button" class="btn btn-primary" id="intelligent" onclick="queryDedorm()"
+                  style=" float: right;">
+                  智能推荐
+                </button>
+                <button type="button" class="btn btn-primary" id="btn_show_new" onclick="showNew()"
+                  style=" float: right; display: none;">
+                  显示变形文章
+                </button>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <textarea id="summernote">
+                 请在此粘贴要变形的文章
+                </textarea>
+              </div>
+            </div>
+            <div class="card card-outline card-info" style="display:none;" id="new_div">
+              <div class="card-header">
+                <h3 class="card-title">
+                  文章变形
+                </h3>
+                <!-- <button type="button" class="btn btn-primary" onclick="showOld()" style=" float: right;">
+                  显示原文
+                </button> -->
+                <button type="button" class="btn btn-primary" onclick="showDiff()" style=" float: right;">
+                  原文对比
+                </button>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <textarea id="summernote_new">
+
+                </textarea>
+              </div>
+            </div>
+          </div>
+          <!-- /.col-->
+        </div>
+      </div>
+      <!-- /.content -->
+    </div>
+    <!-- loading -->
+    <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      data-backdrop='static'>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">提示</h4>
+          </div>
+          <div class="modal-body">
+            <img class="img-fluid pad" src="/dist/img/loading-3.gif" alt="Photo">
+            <!-- 正在生成中请稍候。。。<span id="result"></span> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="textual-comparison-wrap" id="div_diff">
+
+      <div class="textual-comparison">
+        <div>
+          <h4>改写前</h4>
+          <div id="content_before">
+          </div>
+        </div>
+        <div>
+          <h4>改写后</h4>
+          <div id="content_after">
+          </div>
+          <button type="button" onclick="hide_diff()" class="btn btn-primary">确定</button>
+          <span class="tag">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/js/select2.full.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- jsGrid
+  <script src="plugins/jsgrid/jsgrid.min.js"></script> -->
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Summernote -->
+  <script src="plugins/summernote/summernote-bs4.min.js"></script>
+  <script src="plugins/summernote/lang/summernote-zh-CN.js"></script>
+  <!-- Page specific script -->
+  <script>
+    var summernote = null;
+    var summernote_new = null;
+    $(function () {
+      initSummernote();
+      initSummernote_new();
+    });
+
+    // 初始话 富文本编辑器
+    function initSummernote_new() {
+      summernote_new = $('#summernote_new')
+      summernote_new.summernote({
+        height: 700,
+        focus: true,
+        lang: 'zh-CN',
+
+        fontNames: [
+          '黑体',
+          '宋体',
+          '新宋体',
+          '仿宋',
+          '楷体',
+          '仿宋GB2312',
+          '楷体GB2312',
+          '微软雅黑',
+          '冬青黑体',
+          '华文细黑',
+          '华文黑体',
+          '华文楷体',
+          '华文仿宋',
+          '隶书',
+          '幼圆',
+          '华文宋体',
+          '华文中宋',
+          '方正舒体',
+          '方正姚体',
+          '华文彩云',
+          '华文琥珀',
+          '华文隶书',
+          '华文行楷',
+          '华文新魏',
+        ],
+        toolbar: [
+          ['style', ['bold', 'italic', 'underline', 'clear', 'style']],
+          ['fontsize',
+            ['fontsize',
+              'fontsizeunit']
+          ],
+          ['color',
+            ['color',
+              'forecolor',
+              'backcolor']
+          ],
+          ['font',
+            ['fontname',
+              'strikethrough',
+              'superscript',
+              'subscript',
+              'clear']
+          ],
+
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['height', ['height']],
+          ['insert', ['picture', 'link', 'video', 'table', 'hr']],
+          ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
+        ],
+        callbacks: {
+          onChange: function (contents, $editable) {
+            // noteEditable = $('.note-editable p');
+            // $('.note-editable').off('click', 'p');
+            // $('.note-editable').on('click', 'p', function () {
+            //   // alert( $(this).text());
+            //   $('.note-editable p').removeClass('active');
+            //   $(this).addClass('active');
+            //   currentActiveP = $(this);
+            // });
+            // // noteEditable.click(function () {
+            // //   console.log('文字被点击')
+            // //   $(this).addClass('active').siblings().removeClass('active')
+            // // })
+            // noteEditable.removeClass('active') //清除 click 样式
+            // // var innerText = summernote.summernote('codeview.toggle')
+            // console.log($('.note-editable').text())
+            // $('.word-count').text(`字数统计：${$('.note-editable').text().length} 字 `)
+            // console.log('onChange:')
+          },
+          onPaste: function (e) {
+            // console.log('Called event paste')
+          }
+        }
+      })
+    }
+    // 初始话 富文本编辑器
+    function initSummernote() {
+      summernote = $('#summernote')
+      summernote.summernote({
+        height: 700,
+        focus: true,
+        lang: 'zh-CN',
+
+        fontNames: [
+          '黑体',
+          '宋体',
+          '新宋体',
+          '仿宋',
+          '楷体',
+          '仿宋GB2312',
+          '楷体GB2312',
+          '微软雅黑',
+          '冬青黑体',
+          '华文细黑',
+          '华文黑体',
+          '华文楷体',
+          '华文仿宋',
+          '隶书',
+          '幼圆',
+          '华文宋体',
+          '华文中宋',
+          '方正舒体',
+          '方正姚体',
+          '华文彩云',
+          '华文琥珀',
+          '华文隶书',
+          '华文行楷',
+          '华文新魏',
+        ],
+        toolbar: [
+          ['style', ['bold', 'italic', 'underline', 'clear', 'style']],
+          ['fontsize',
+            ['fontsize',
+              'fontsizeunit']
+          ],
+          ['color',
+            ['color',
+              'forecolor',
+              'backcolor']
+          ],
+          ['font',
+            ['fontname',
+              'strikethrough',
+              'superscript',
+              'subscript',
+              'clear']
+          ],
+
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['height', ['height']],
+          ['insert', ['picture', 'link', 'video', 'table', 'hr']],
+          ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
+        ],
+        callbacks: {
+          onChange: function (contents, $editable) {
+            // noteEditable = $('.note-editable p');
+            // $('.note-editable').off('click', 'p');
+            // $('.note-editable').on('click', 'p', function () {
+            //   // alert( $(this).text());
+            //   $('.note-editable p').removeClass('active');
+            //   $(this).addClass('active');
+            //   currentActiveP = $(this);
+            // });
+            // // noteEditable.click(function () {
+            // //   console.log('文字被点击')
+            // //   $(this).addClass('active').siblings().removeClass('active')
+            // // })
+            // noteEditable.removeClass('active') //清除 click 样式
+            // // var innerText = summernote.summernote('codeview.toggle')
+            // console.log($('.note-editable').text())
+            // $('.word-count').text(`字数统计：${$('.note-editable').text().length} 字 `)
+            // console.log('onChange:')
+          },
+          onPaste: function (e) {
+            // console.log('Called event paste')
+          }
+        }
+      })
+    }
+    function queryDedorm() {
+      $('#intelligent').attr("disabled", "disabled");
+      $('#loading').modal('show');
+      var url = domainUrl + "/ai/queryDeformText2";
+      var data = { content: $('#summernote').summernote('code') };
+      // $('#summernote_new').summernote('code',$('#summernote').summernote('code'));
+      // showNew();
+      // alert("23r3rqr")
+      // $('#loading').modal('hide');
+      postMessage(url, data).then(function (res) {
+        if (res.code == 200) {
+          showNew();
+          $('#summernote_new').summernote('code', res.data)
+        } else {
+          alert(res.message);
+        }
+        $('#loading').modal('hide');
+        $('#intelligent').removeAttr("disabled");
+      });
+
+    }
+
+    function showOld() {
+      $('#old_div').show();
+      $('#new_div').hide();
+      $("#btn_show_new").show();
+    }
+    function showNew() {
+      $('#new_div').show();
+      $('#old_div').hide();
+    }
+    function showDiff() {
+      $('#content_before').html($('#summernote').summernote('code'));
+      $('#content_after').html($('#summernote_new').summernote('code'));
+      $('.textual-comparison-wrap').show();
+    }
+    function hide_diff()
+    {
+      $('.textual-comparison-wrap').hide();
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>稿件撰写</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="plugins/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+
+</head>
+
+<body class="hold-transition layout-top-nav">
+  <div class="wrapper">
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">稿件撰写</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">稿件撰写</a></li>
+                <li class="breadcrumb-item active">智能撰写</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="row">
+          <div id="first-div" class="col-md-12">
+            <!-- jquery validation -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">智能写稿<small>v1.0</small></h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form id="quickForm" novalidate="novalidate">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="txtTopic">文章主题</label>
+                    <input type="text" name="email" class="form-control" id="txtTopic" placeholder="要写关于什么的">
+                  </div>
+                  <div class="form-group">
+                    <label for="txtCharCount">字数限制</label>
+                    <input type="number" name="txtCharCount" class="form-control" id="txtCharCount" placeholder="100">
+                  </div>
+                  <div class="form-group">
+                    <label for="txtKeys">侧重点（多个使用,分割）</label>
+                    <input type="text" name="txtKeys" class="form-control" id="txtKeys" placeholder="文章侧重点（多个使用,分割）">
+                  </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="button" onclick="startAutoWrite();" class="btn btn-primary">开始生成</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
+          </div>
+          <div id="second-div" class="col-md-12" style="display: none;">
+            <textarea id="summernote">
+                请在此粘贴要变形的文章
+               </textarea>
+          </div>
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.content -->
+    </div>
+  </div>
+
+  <div class="modal fade show" id="modal-tips" style="display: none; padding-right: 21px;" aria-modal="true"
+    role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">提示</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="txt-tips">One fine body…</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-light" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- loading -->
+  <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    data-backdrop='static'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel"> 正在生成中请稍候...</h4>
+        </div>
+        <div class="modal-body">
+
+          <img class="img-fluid pad" src="/dist/img/loading-3.gif" alt="Photo">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- REQUIRED SCRIPTS -->
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/js/select2.full.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- jsGrid -->
+  <script src="plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="dist/js/common.js"></script>
+  <!-- Summernote -->
+  <script src="plugins/summernote/summernote-bs4.min.js"></script>
+  <script src="plugins/summernote/lang/summernote-zh-CN.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(function () {
+      initSummernote();
+    });
+    function startAutoWrite() {
+      var topic = $('#txtTopic').val();
+      var charCount = $('#txtCharCount').val();
+      var keys = $('#txtKeys').val();
+      if (topic == "") {
+        showErrorMsg("话题不能为空");
+        return;
+      }
+      if (charCount < 1) {
+        showErrorMsg("请输入稿件要求的字数");
+        return;
+      }
+      if (keys == "") {
+        showErrorMsg("侧重点不能为空");
+        return;
+      }
+      $('#loading').modal('show');
+      var url = domainUrl + "/ai/writeArticles";
+      var data = {
+        topic: topic,
+        charCount: charCount,
+        keys: keys
+      };
+      // $('#summernote_new').summernote('code',$('#summernote').summernote('code'));
+      // showNew();
+      // alert("23r3rqr")
+      // $('#loading').modal('hide');
+      postMessage(url, data).then(function (res) {
+        if (res.code == 200) {
+          $('#summernote').summernote('code', res.data);
+          $('#first-div').hide();
+          $('#second-div').show();
+        } else {
+          alert(res.message);
+        }
+        $('#loading').modal('hide');
+      });
+
+
+    }
+    function showErrorMsg(message) {
+      $('#txt-tips').text(message);
+      $('#modal-tips').modal('show');
+    }
+
+    // 初始话 富文本编辑器
+    function initSummernote() {
+      summernote = $('#summernote')
+      summernote.summernote({
+        height: 700,
+        focus: true,
+        lang: 'zh-CN',
+
+        fontNames: [
+          '黑体',
+          '宋体',
+          '新宋体',
+          '仿宋',
+          '楷体',
+          '仿宋GB2312',
+          '楷体GB2312',
+          '微软雅黑',
+          '冬青黑体',
+          '华文细黑',
+          '华文黑体',
+          '华文楷体',
+          '华文仿宋',
+          '隶书',
+          '幼圆',
+          '华文宋体',
+          '华文中宋',
+          '方正舒体',
+          '方正姚体',
+          '华文彩云',
+          '华文琥珀',
+          '华文隶书',
+          '华文行楷',
+          '华文新魏',
+        ],
+        toolbar: [
+          ['style', ['bold', 'italic', 'underline', 'clear', 'style']],
+          ['fontsize',
+            ['fontsize',
+              'fontsizeunit']
+          ],
+          ['color',
+            ['color',
+              'forecolor',
+              'backcolor']
+          ],
+          ['font',
+            ['fontname',
+              'strikethrough',
+              'superscript',
+              'subscript',
+              'clear']
+          ],
+
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['height', ['height']],
+          ['insert', ['picture', 'link', 'video', 'table', 'hr']],
+          ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
+        ],
+        callbacks: {
+          onChange: function (contents, $editable) {
+            // noteEditable = $('.note-editable p');
+            // $('.note-editable').off('click', 'p');
+            // $('.note-editable').on('click', 'p', function () {
+            //   // alert( $(this).text());
+            //   $('.note-editable p').removeClass('active');
+            //   $(this).addClass('active');
+            //   currentActiveP = $(this);
+            // });
+            // // noteEditable.click(function () {
+            // //   console.log('文字被点击')
+            // //   $(this).addClass('active').siblings().removeClass('active')
+            // // })
+            // noteEditable.removeClass('active') //清除 click 样式
+            // // var innerText = summernote.summernote('codeview.toggle')
+            // console.log($('.note-editable').text())
+            // $('.word-count').text(`字数统计：${$('.note-editable').text().length} 字 `)
+            // console.log('onChange:')
+          },
+          onPaste: function (e) {
+            // console.log('Called event paste')
+          }
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>

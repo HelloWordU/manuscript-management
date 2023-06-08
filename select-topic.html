@@ -14,7 +14,7 @@
   <!-- Select2 -->
   <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
   <!-- IonIcons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="plugins/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- jsGrid -->
@@ -71,6 +71,8 @@
               <div class="col-3 col-form-label">
                 <a href="javascript:void(0)" onclick="loadData();" class="btn btn-primary btn-sm"><i
                     class="fa fa-search"></i>查询</a>
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
+                    class="btn btn-primary btn-sm"><i class="fa fa-copy"></i> 上传</a>
               </div>
             </div>
 
@@ -86,7 +88,35 @@
       <!-- /.content -->
     </div>
   </div>
-
+  <!-- ./wrapper -->
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">导入热文选题</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="projectName">请上传文件</label>
+                <input type="file" class="form-control" id="uploadFile1" placeholder="请选择文件">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="uploadFile();">保存</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
   <!-- REQUIRED SCRIPTS -->
   <!-- jQuery -->
   <script src="plugins/jquery/jquery.min.js"></script>
@@ -216,7 +246,39 @@
         }
       })
     }
+    function uploadFile() {
+      if($("#uploadFile1").val()=='')
+      {
+        alert("请选择文件");
+        return;
+      }
+      var saveUrl = domainUrl + "/selectTopic/upload";
+      var data = new FormData();
+      data.append('uploadFile', $("#uploadFile1").prop("files")[0]);
 
+      $.ajax({
+        url: saveUrl,
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        beforeSend: function (request) {
+          request.setRequestHeader("accessToken", getCookie("accessToken"));
+        },
+        success: function (res) {
+          if (res.code == 200) {
+            alert("上传成功");
+            $("#uploadFile1").val('');
+            loadData();
+            $('#modal-default').modal('hide');
+          }
+          else {
+            alert(res.message);
+          }
+        }
+      });
+    }
   </script>
 </body>
 

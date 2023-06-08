@@ -14,7 +14,7 @@
   <!-- Select2 -->
   <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
   <!-- IonIcons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="plugins/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- jsGrid -->
@@ -191,8 +191,7 @@
     }
 
     function edit(id) {
-      alert(id);
-      window.location.href='write-topic-edit.html?id=1';
+      window.location.href='write-topic-edit.html?id='+id;
      // window.parent.createTab("ceshi","/write-topic-edit.html?id=1","write-topic-edit-1");
       // var url = domainUrl + "/selectTopic/addToWrite?id=" + id;
       // postMessage(url, {}).then(function (res) {
